@@ -2,21 +2,22 @@ FROM zencash/gosu-base:1.10
 
 MAINTAINER cronicc@protonmail.com
 
-ENV release=v.2.0.9-2-b4315d9 package=zen-2.0.9-2-b4315d9-amd64.deb checksum=f009270e9f18062724ca925d57ccc571e854acfc01856eb3ba6148b28862c9d9
+ENV release=v2.0.9-3-b8d2ebf package=zen-2.0.9-3-b8d2ebf-amd64.deb
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install ca-certificates curl wget libgomp1 \
     && curl -Lo /root/$package "https://github.com/ZencashOfficial/zen/releases/download/$release/$package" \
+    && curl -Lo /root/$package.sha256 "https://github.com/ZencashOfficial/zen/releases/download/$release/$package.sha256" \
 # move to gpg verification once CI release process is set up
 #    && curl signature.asc \
 #    && export GNUPGHOME="$(mktemp -d)" \
 #    && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys \
 #    && gpg --batch --verify /root/$package signature.asc \
 #    && rm -r "$GNUPGHOME" \
-    && sha256sum /root/$package | grep -q $checksum \
+    && cd /root && sha256sum -c /root/$package.sha256 | grep -q OK \
     && dpkg -i /root/$package \
-    && rm /root/$package \
+    && rm /root/$package* \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
