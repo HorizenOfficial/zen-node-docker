@@ -1,0 +1,30 @@
+[Unit]
+Description=Zen Daemon Container
+After=docker.service
+Requires=docker.service
+ 
+[Service]
+TimeoutStartSec=10m
+Restart=always
+# Add environment variables, adjust them to your needs
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment LOCAL_USER_ID=$(id -u zennode)"
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment LOCAL_GRP_ID=$(getent group zennode | cut -d : -f 3)"
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment RPC_USER=zenrpc"
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment RPC_PASSWORD=42forty-two"
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment OPTS='-externalip=$yourexternalip -txindex -debug=1 -logips=1'"
+ExecStartPre=-/usr/bin/docker stop %i
+ExecStartPre=-/usr/bin/docker rm  %i
+ExecStartPre=/usr/bin/docker pull zencash/zen-node
+ExecStart=/usr/bin/docker run --rm --init \
+                              -e LOCAL_USER_ID \
+                              -e LOCAL_GRP_ID \
+                              -e RPC_USER \
+                              -e RPC_PASSWORD \
+                              -e OPTS \
+                              -p 9033:9033 \
+                              -v zen-data:/mnt/zen \
+                              -v zcash-params:/mnt/zcash-params \
+                              --name %i zencash/zen-node
+[Install]
+WantedBy=multi-user.target
+
