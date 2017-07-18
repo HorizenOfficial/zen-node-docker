@@ -64,12 +64,16 @@ fi
 # Prepend some default command line options to OPTS, user provided values will be appended and take precedence.
 OPTS="-listenonion=0 -rpcallowip=0.0.0.0/0 $OPTS"
 
-# If a RPC username/password were provided, prepend them to OPTS (command line options take precedence over zen.conf).
+# If a RPC username/password were provided, update zen.conf files with them.
 if [[ -v RPC_USER ]]; then
-    OPTS="-rpcuser=$RPC_USER $OPTS"
+    sed -i '/^rpcuser/d' /home/user/.zen/zen.conf
+    sed -i '/^rpcuser/d' /home/user/.zen/testnet3/zen.conf
+    echo "rpcuser="$RPC_USER | tee -a /home/user/.zen/zen.conf >> /home/user/.zen/testnet3/zen.conf
 fi
 if [[ -v RPC_PASSWORD ]]; then
-    OPTS="-rpcpassword=$RPC_PASSWORD $OPTS"
+    sed -i '/^rpcpassword/d' /home/user/.zen/zen.conf
+    sed -i '/^rpcpassword/d' /home/user/.zen/testnet3/zen.conf
+    echo "rpcpassword="$RPC_PASSWORD | tee -a /home/user/.zen/zen.conf >> /home/user/.zen/testnet3/zen.conf
 fi
 
 # Fix ownership of the created files/folders
