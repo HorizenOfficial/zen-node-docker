@@ -14,7 +14,7 @@ RUN apt-get update \
 #    && gpg --batch --verify /root/$package signature.asc \
 #    && rm -r "$GNUPGHOME" \
     && cd /root && sha256sum -c /root/zen-2.0.9-3-6f3cc47-amd64.deb.sha256 | grep -q OK \
-    && dpkg -i /root/zen-2.0.9-3-6f3cc47-amd64.deb.deb \
+    && dpkg -i /root/zen-2.0.9-3-6f3cc47-amd64.deb \
     && rm /root/zen-2.0.9-3-6f3cc47-amd64.deb* \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
