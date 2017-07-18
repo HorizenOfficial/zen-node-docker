@@ -24,12 +24,16 @@ export HOME=/home/user
 
 # If volumes for zen or zcash-params are present, symlink them to user's home, if not create folders.
 if [ -d "/mnt/zen" ]; then
-    ln -s /mnt/zen /home/user/.zen > /dev/null 2>&1 || true
+    if [ ! -L /home/user/.zen ]; then
+        ln -s /mnt/zen /home/user/.zen > /dev/null 2>&1 || true
+    fi
 else
     mkdir -p /home/user/.zen
 fi
 if [ -d "/mnt/zcash-params" ]; then
-    ln -s /mnt/zcash-params /home/user/.zcash-params > /dev/null 2>&1 || true
+    if [ ! -L /home/user/.zcash-params ]; then
+        ln -s /mnt/zcash-params /home/user/.zcash-params > /dev/null 2>&1 || true
+    fi
 else
     mkdir -p /home/user/.zcash-params
 fi
