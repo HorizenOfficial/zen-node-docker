@@ -2,7 +2,7 @@ FROM zencash/gosu-base:1.10
 
 MAINTAINER cronicc@protonmail.com
 
-ENV release=v2.0.9-3-b8d2ebf package=zen-2.0.9-3-b8d2ebf-amd64.deb
+ENV release=v2.0.9-4 package=zen-2.0.9-4-2045d34-amd64.deb
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
