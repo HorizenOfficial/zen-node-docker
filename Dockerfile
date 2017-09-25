@@ -2,20 +2,18 @@ FROM zencash/gosu-base:1.10
 
 MAINTAINER cronicc@protonmail.com
 
-ENV release=v2.0.9-4 package=zen-2.0.9-4-2045d34-amd64.deb
+ENV release=v2.0.10 package=zen-2.0.10-amd64.deb
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install ca-certificates curl wget libgomp1 \
     && curl -Lo /root/$package "https://github.com/ZencashOfficial/zen/releases/download/$release/$package" \
-    && curl -Lo /root/$package.sha256 "https://github.com/ZencashOfficial/zen/releases/download/$release/$package.sha256" \
-# move to gpg verification once CI release process is set up
-#    && curl signature.asc \
-#    && export GNUPGHOME="$(mktemp -d)" \
-#    && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys \
-#    && gpg --batch --verify /root/$package signature.asc \
-#    && rm -r "$GNUPGHOME" \
-    && cd /root && sha256sum -c /root/$package.sha256 | grep -q OK \
+    && curl -Lo /root/$package.asc "https://github.com/ZencashOfficial/zen/releases/download/$release/$package.asc" \
+    && export GNUPGHOME="$(mktemp -d)" \
+    && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 4991B669 \
+    && gpg --batch --verify /root/$package.asc /root/$package \
+    && rm -r "$GNUPGHOME" \
+#    && cd /root && sha256sum -c /root/$package.sha256 | grep -q OK \
     && dpkg -i /root/$package \
     && rm /root/$package* \
     && apt-get clean \
