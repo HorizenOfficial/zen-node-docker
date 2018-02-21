@@ -2,7 +2,7 @@ FROM zencash/gosu-base:1.10
 
 MAINTAINER cronicc@protonmail.com
 
-ENV release=v2.0.10-1 package=zen-2.0.10-1-amd64.deb
+ENV release=v2.0.11 package=zen-2.0.11-amd64.deb
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
@@ -13,7 +13,6 @@ RUN apt-get update \
     && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 4991B669 \
     && gpg --batch --verify /root/$package.asc /root/$package \
     && rm -r "$GNUPGHOME" \
-#    && cd /root && sha256sum -c /root/$package.sha256 | grep -q OK \
     && dpkg -i /root/$package \
     && rm /root/$package* \
     && apt-get clean \
