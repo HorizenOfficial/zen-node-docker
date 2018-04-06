@@ -7,6 +7,8 @@ ENV release=v2.0.11 package=zen-2.0.11-amd64.deb
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install ca-certificates curl wget libgomp1 \
+    && curl -Lo /usr/local/share/ca-certificates/lets-encrypt-x3-cross-signed.crt https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt \
+    && update-ca-certificates \
     && curl -Lo /root/$package "https://github.com/ZencashOfficial/zen/releases/download/$release/$package" \
     && curl -Lo /root/$package.asc "https://github.com/ZencashOfficial/zen/releases/download/$release/$package.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
