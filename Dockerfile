@@ -2,31 +2,30 @@ FROM zencash/gosu-base:1.10
 
 MAINTAINER cronicc@protonmail.com
 
-COPY zen-2.0.10-ba0989a-amd64.deb zen-2.0.10-ba0989a-amd64.deb.sha256 /root/
+ARG package=zen-2.0.11-0704488a-amd64.deb
+
+COPY $package $package.asc /root/
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install ca-certificates curl wget libgomp1 \
-# move to gpg verification once CI release process is set up
-#    && curl signature.asc \
-#    && export GNUPGHOME="$(mktemp -d)" \
-#    && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys \
-#    && gpg --batch --verify /root/$package signature.asc \
-#    && rm -r "$GNUPGHOME" \
-    && cd /root && sha256sum -c /root/zen-2.0.10-ba0989a-amd64.deb.sha256 | grep -q OK \
-    && dpkg -i /root/zen-2.0.10-ba0989a-amd64.deb \
-    && rm /root/zen-2.0.10-ba0989a-amd64.deb* \
+    && export GNUPGHOME="$(mktemp -d)" \
+    && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys C0FBE0B4 \
+    && gpg --batch --verify /root/$package.asc /root/$package \
+    && rm -r "$GNUPGHOME" \
+    && dpkg -i /root/$package \
+    && rm /root/$package* \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Default p2p communication port, can be changed via $OPTS (e.g. docker run -e OPTS="-port=9876")
+# Default testnet p2p communication port, can be changed via $OPTS (e.g. docker run -e OPTS="-port=9876")
 # or via a "port=9876" line in zen.conf.
-EXPOSE 9033
+EXPOSE 19033
 
-# Default rpc communication port, can be changed via $OPTS (e.g. docker run -e OPTS="-rpcport=8765")
+# Default testnet rpc communication port, can be changed via $OPTS (e.g. docker run -e OPTS="-rpcport=8765")
 # or via a "rpcport=8765" line in zen.conf. This port should never be mapped to the outside world
 # via the "docker run -p/-P" command.
-EXPOSE 8231
+EXPOSE 18231
 
 # Data volumes, if you prefer mounting a host directory use "-v /path:/mnt/zen" command line
 # option (folder ownership will be changed to the same UID/GID as provided by the docker run command)
