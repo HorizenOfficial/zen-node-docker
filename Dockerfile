@@ -20,12 +20,12 @@ RUN apt-get update \
 
 # Default testnet p2p communication port, can be changed via $OPTS (e.g. docker run -e OPTS="-port=9876")
 # or via a "port=9876" line in zen.conf.
-EXPOSE 19033
+EXPOSE 9033
 
 # Default testnet rpc communication port, can be changed via $OPTS (e.g. docker run -e OPTS="-rpcport=8765")
 # or via a "rpcport=8765" line in zen.conf. This port should never be mapped to the outside world
 # via the "docker run -p/-P" command.
-EXPOSE 18231
+EXPOSE 8231
 
 # Data volumes, if you prefer mounting a host directory use "-v /path:/mnt/zen" command line
 # option (folder ownership will be changed to the same UID/GID as provided by the docker run command)
