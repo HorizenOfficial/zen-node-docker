@@ -2,8 +2,7 @@ FROM zencash/gosu-base:1.10
 
 MAINTAINER cronicc@protonmail.com
 
-ARG package=zen-2.0.11-0704488a-amd64.deb
-
+ARG package=zen-2.0.11-0704488-amd64.deb
 COPY $package $package.asc /root/
 
 RUN apt-get update \
