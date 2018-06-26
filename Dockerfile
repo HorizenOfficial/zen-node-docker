@@ -2,7 +2,8 @@ FROM zencash/gosu-base:1.10
 
 MAINTAINER cronicc@protonmail.com
 
-ARG package=zen-2.0.11-0704488-amd64.deb
+ARG package=zen-2.0.14-5e7e5ce-amd64.deb
+
 COPY $package $package.asc /root/
 
 RUN apt-get update \
@@ -11,10 +12,8 @@ RUN apt-get update \
     && curl -Lo /usr/local/share/ca-certificates/lets-encrypt-x3-cross-signed.crt https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt \
     && echo "e446c5e9dbef9d09ac9f7027c034602492437a05ff6c40011d7235fca639c79a  /usr/local/share/ca-certificates/lets-encrypt-x3-cross-signed.crt" | sha256sum -c - \
     && update-ca-certificates \
-    && curl -Lo /root/$package "https://github.com/ZencashOfficial/zen/releases/download/$release/$package" \
-    && curl -Lo /root/$package.asc "https://github.com/ZencashOfficial/zen/releases/download/$release/$package.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys C0FBE0B4 \
+    && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 4991B669 \
     && gpg --batch --verify /root/$package.asc /root/$package \
     && rm -r "$GNUPGHOME" \
     && dpkg -i /root/$package \
