@@ -2,7 +2,7 @@ FROM zencash/gosu-base:1.10
 
 MAINTAINER cronicc@protonmail.com
 
-ARG package=zen-2.0.14-5e7e5ce-amd64.deb
+ARG package=zen-2.0.15-bitcore-amd64.deb
 
 COPY $package $package.asc /root/
 
