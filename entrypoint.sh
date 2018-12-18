@@ -76,6 +76,13 @@ if [[ -v RPC_PASSWORD ]]; then
     echo "rpcpassword="$RPC_PASSWORD | tee -a /home/user/.zen/zen.conf >> /home/user/.zen/testnet3/zen.conf
 fi
 
+# If an external IP was provided, update zen.conf files with it
+if [[ -v EXTERNAL_IP ]]; then
+    sed -i '/^externalip/d' /home/user/.zen/zen.conf
+    sed -i '/^externalip/d' /home/user/.zen/testnet3/zen.conf
+    echo "externalip="$EXTERNAL_IP | tee -a /home/user/.zen/zen.conf >> /home/user/.zen/testnet3/zen.conf
+fi
+
 # Fix ownership of the created files/folders
 chown -R user:user /home/user /mnt/zen /mnt/zcash-params
 
