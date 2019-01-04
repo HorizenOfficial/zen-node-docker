@@ -1,11 +1,14 @@
-FROM zencash/gosu-base:1.10
+FROM zencash/gosu-base:1.11
 
-MAINTAINER cronicc@protonmail.com
+MAINTAINER cronic@zensystem.io
 
-ENV release=v2.0.15 package=zen-2.0.15-amd64.deb
+ARG release=v2.0.16 
+
+ARG package=zen-2.0.16-amd64.deb
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends dist-upgrade \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install ca-certificates curl wget libgomp1 dnsutils \
     && curl -Lo /usr/local/share/ca-certificates/lets-encrypt-x3-cross-signed.crt https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt \
     && echo "e446c5e9dbef9d09ac9f7027c034602492437a05ff6c40011d7235fca639c79a  /usr/local/share/ca-certificates/lets-encrypt-x3-cross-signed.crt" | sha256sum -c - \
@@ -13,13 +16,16 @@ RUN apt-get update \
     && curl -Lo /root/$package "https://github.com/ZencashOfficial/zen/releases/download/$release/$package" \
     && curl -Lo /root/$package.asc "https://github.com/ZencashOfficial/zen/releases/download/$release/$package.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 4991B669 \
+    && gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
+    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
+    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 \
     && gpg --batch --verify /root/$package.asc /root/$package \
     && rm -r "$GNUPGHOME" \
     && dpkg -i /root/$package \
     && rm /root/$package* \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get -y clean \
+    && apt-get -y autoclean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*.deb
 
 # Default p2p communication port, can be changed via $OPTS (e.g. docker run -e OPTS="-port=9876")
 # or via a "port=9876" line in zen.conf.
