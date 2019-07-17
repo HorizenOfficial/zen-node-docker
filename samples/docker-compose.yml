@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  zen-node:
+    restart: always
+    image: zencash/zen-node:v2.0.18
+    container_name: zen-node
+    stop_grace_period: 10m
+    ports:
+      - "9033:9033"
+    volumes:
+      - "zen-data:/mnt/zen"
+      - "zcash-params:/mnt/zcash-params"
+    environment:
+      - "LOCAL_USER_ID=1000"
+      - "LOCAL_GRP_ID=1000"
+      - "PORT=9033"
+      - "ADDNODE=mainnet.zensystem.io:9033,37.120.176.224:9033,[2a03:4000:6:8315::1]:9033"
+      - "EXTERNAL_IP=DETECT"
+      - "RPC_USER=zenrpc"
+      - "RPC_PASSWORD=42forty-two"
+      - "RPC_PORT=8231"
+      - "RPC_ALLOWIP_PRESET=SUBNET"
+      - "OPTS=-txindex=1"
+    networks:
+      - zen-node
+    tmpfs:
+      - /run
+      - /tmp
+
+volumes:
+  zen-data:
+  zcash-params:
+
+networks:
+  zen-node:
+
