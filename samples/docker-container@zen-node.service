@@ -5,21 +5,32 @@ Requires=docker.service
  
 [Service]
 TimeoutStartSec=10m
+TimeoutStopSec=5m
 Restart=always
 # Add environment variables, adjust them to your needs
 ExecStartPre=/bin/bash -c "/bin/systemctl set-environment LOCAL_USER_ID=$(id -u zennode)"
-ExecStartPre=/bin/bash -c "/bin/systemctl set-environment LOCAL_GRP_ID=$(getent group zennode | cut -d : -f 3)"
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment LOCAL_GRP_ID=$(id -g zennode)"
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment PORT=9033"
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment ADDNODE='mainnet.zensystem.io:9033,37.120.176.224:9033,[2a03:4000:6:8315::1]:9033'"
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment EXTERNAL_IP='DETECT'"
 ExecStartPre=/bin/bash -c "/bin/systemctl set-environment RPC_USER=zenrpc"
 ExecStartPre=/bin/bash -c "/bin/systemctl set-environment RPC_PASSWORD=42forty-two"
-ExecStartPre=/bin/bash -c "/bin/systemctl set-environment OPTS='-externalip=$yourexternalip -txindex -debug=1 -logips=1'"
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment RPC_PORT=8231"
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment RPC_ALLOWIP_PRESET=SUBNET"
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment OPTS='-txindex=1'"
 ExecStartPre=-/usr/bin/docker stop %i
 ExecStartPre=-/usr/bin/docker rm  %i
 ExecStartPre=/usr/bin/docker pull zencash/zen-node
-ExecStart=/usr/bin/docker run --rm --init \
+ExecStart=/usr/bin/docker run --rm \
                               -e LOCAL_USER_ID \
                               -e LOCAL_GRP_ID \
+                              -e PORT \
+                              -e ADDNODE \
+                              -e EXTERNAL_IP \
                               -e RPC_USER \
                               -e RPC_PASSWORD \
+                              -e RPC_PORT \
+                              -e RPC_ALLOWIP_PRESET \
                               -e OPTS \
                               -p 9033:9033 \
                               -v zen-data:/mnt/zen \
