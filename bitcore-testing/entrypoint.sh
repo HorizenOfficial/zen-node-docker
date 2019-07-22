@@ -113,8 +113,8 @@ if [ "$RPC_ALLOWIP_PRESET" == "ANY" ]; then
     TO_ALLOW+=("0.0.0.0/0")
     TO_ALLOW+=("::/0")
 elif [ "$RPC_ALLOWIP_PRESET" == "SUBNET" ]; then
-    IP4=( $(ip -o -f inet route show | awk '/scope link/ {print $1}') )
-    IP6=( $(ip -o -f inet6 route show | awk '/proto kernel/ {print $1}' | grep "/") )
+    IP4=( $(ip -o -f inet route show | awk '/scope link/ {print $1}' || true) )
+    IP6=( $(ip -o -f inet6 route show | awk '/proto kernel/ {print $1}' | grep "/" || true) )
     if (( ${#IP4[@]} )); then
         for net in "${IP4[@]}"; do
             # only add local subnets
