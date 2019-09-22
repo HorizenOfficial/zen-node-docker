@@ -25,10 +25,10 @@ echo -e "Starting with UID/GID : $LOCAL_UID/$LOCAL_GID\n"
 
 # set $HOME
 if [ ! "$USER_ID" == "0"  ]; then
-    USERNAME=user
+    export USERNAME=user
     export HOME=/home/$USERNAME
 else
-    USERNAME=root
+    export USERNAME=root
     export HOME=/root
 fi
 
@@ -72,11 +72,11 @@ if ! grep -q 'rpcpassword' $HOME/.zen/testnet3/zen.conf ; then
 fi
 
 # Prepend some default command line options to OPTS, user provided values will be appended and take precedence.
-OPTS="-listenonion=0 $OPTS"
+export OPTS="-listenonion=0 $OPTS"
 
 # Logging to stdout or debug.log
 if [[ -v LOG ]] && [ "$LOG" == "STDOUT" ]; then
-    OPTS="-printtoconsole $OPTS"
+    export OPTS="-printtoconsole $OPTS"
 fi
 
 # If RPC settings were provided, update zen.conf files with them.
@@ -103,7 +103,7 @@ fi
 
 # Default to ANY to keep existring behavior, NOTE default will change to LOCALHOST in a future release
 if [[ ! -v RPC_ALLOWIP_PRESET ]]; then
-    RPC_ALLOWIP_PRESET=ANY
+    export RPC_ALLOWIP_PRESET=ANY
 fi
 
 TO_ALLOW=()
@@ -186,8 +186,33 @@ if [[ ! -z "$ADDNODE" ]]; then
     done
 fi
 
+# TLS_KEY_PATH path to SSL private key inside of the container
+# Example: TLS_KEY_PATH="/home/user/.zen/ssl.key"
+
+# Set tlskeypath= in zen.conf
+if [[ ! -z "$TLS_KEY_PATH" ]]; then
+    sed -i '/^tlskeypath/d' $HOME/.zen/zen.conf $HOME/.zen/testnet3/zen.conf
+    echo "tlskeypath=${TLS_KEY_PATH}" | tee -a $HOME/.zen/zen.conf >> $HOME/.zen/testnet3/zen.conf
+fi
+
+# TLS_CERT_PATH path to SSL certificate inside of the container
+# Example: TLS_CERT_PATH="/home/user/.zen/ssl.crt"
+
+# Set tlscertpath= in zen.conf
+if [[ ! -z "$TLS_CERT_PATH" ]]; then
+    sed -i '/^tlscertpath/d' $HOME/.zen/zen.conf $HOME/.zen/testnet3/zen.conf
+    echo "tlscertpath=${TLS_CERT_PATH}" | tee -a $HOME/.zen/zen.conf >> $HOME/.zen/testnet3/zen.conf
+fi
+
 # Fix ownership of the created files/folders
 chown -R $USERNAME:$USERNAME $HOME /mnt/zen /mnt/zcash-params
+
+# CUSTOM_SCRIPT, execute user provided script before starting zend, e.g. to backup wallets
+if [[ ! -z "$CUSTOM_SCRIPT" ]]; then
+    chmod +x "${CUSTOM_SCRIPT}"
+    echo "Running custom script: ${CUSTOM_SCRIPT}"
+    bash -c "${CUSTOM_SCRIPT}"
+fi
 
 if [ ! "$USER_ID" == "0"  ]; then
     if [[ "$1" == zend ]]; then

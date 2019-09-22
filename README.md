@@ -50,3 +50,6 @@ To configure the most commonly used zend options, the following environment vari
 * `EXTERNAL_IP` comma separated string of one or more of IPv4, IPv6 or the string "DETECT", no spaces. Adds `externalip=` for each provided IP Address to zen.conf. "DETECT" tries to determine the outgoing IPv4 and IPv6 address using DNS queries to resolver.opendns.org. Example: `-e EXTERNAL_IP="DETECT,1.1.1.1,2606:4700:4700::1111"`
 * `ADDNODE` comma separated string of one or more nodes to try to connect to, in format IPv4:PORT, [IPv6]:PORT or FQDN:PORT, no spaces. Example: `-e ADDNODE="37.120.176.224:9033,[2a03:4000:6:8315::1]:9033,mainnet.horizen.global:9033"`
 * `LOG=STDOUT` sets `-printtoconsole`, logging to docker logs instead of debug.log.
+* `TLS_KEY_PATH` to set the SSL private key path, e.g. `-e TLS_KEY_PATH=/home/user/.zen/ssl.key`
+* `TLS_CERT_PATH` to set the SSL certificate path, e.g. `-e TLS_CERT_PATH=/home/user/.zen/ssl.crt`
+* `CUSTOM_SCRIPT` to run a user defined bash script before launching zend. This is useful to e.g. make backups of wallet.dat each time the container starts. Example: `-e CUSTOM_SCRIPT=/home/user/.zen/backup_wallet.sh`
