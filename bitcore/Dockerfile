@@ -2,9 +2,9 @@ FROM zencash/gosu-base:1.11
 
 MAINTAINER cronic@zensystem.io
 
-ARG release=v2.0.18
+ARG release=v2.0.19
 
-ARG package=zen-2.0.18-bitcore-amd64.deb
+ARG package=zen-2.0.19-bitcore-amd64.deb
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
