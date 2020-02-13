@@ -3,7 +3,7 @@ version: "3"
 services:
   zen-node:
     restart: always
-    image: zencash/zen-node:v2.0.19-1
+    image: zencash/zen-node:latest
     container_name: zen-node
     stop_grace_period: 10m
     ports:
