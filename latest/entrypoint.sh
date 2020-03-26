@@ -205,7 +205,7 @@ if [[ ! -z "$TLS_CERT_PATH" ]]; then
 fi
 
 # Fix ownership of the created files/folders
-chown -R $USERNAME:$USERNAME $HOME /mnt/zen /mnt/zcash-params
+chown -R $LOCAL_UID:$LOCAL_GID $HOME /mnt/zen /mnt/zcash-params
 
 # CUSTOM_SCRIPT, execute user provided script before starting zend, e.g. to backup wallets
 if [[ ! -z "$CUSTOM_SCRIPT" ]]; then
