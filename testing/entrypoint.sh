@@ -8,7 +8,7 @@ USER_ID=${LOCAL_USER_ID:-9001}
 GRP_ID=${LOCAL_GRP_ID:-9001}
 
 if [ ! "$USER_ID" == "0"  ]; then
-    id -g user > /dev/null 2>&1 || groupadd -g $GRP_ID user
+    getent group $GRP_ID > /dev/null 2>&1 || groupadd -g $GRP_ID user
     id -u user > /dev/null 2>&1 || useradd --shell /bin/bash -u $USER_ID -g $GRP_ID -o -c "" -m user
     LOCAL_UID=$(id -u user)
     LOCAL_GID=$(id -g user)
@@ -205,7 +205,7 @@ if [[ ! -z "$TLS_CERT_PATH" ]]; then
 fi
 
 # Fix ownership of the created files/folders
-chown -R $USERNAME:$USERNAME $HOME /mnt/zen /mnt/zcash-params
+chown -R $LOCAL_UID:$LOCAL_GID $HOME /mnt/zen /mnt/zcash-params
 
 # CUSTOM_SCRIPT, execute user provided script before starting zend, e.g. to backup wallets
 if [[ ! -z "$CUSTOM_SCRIPT" ]]; then
