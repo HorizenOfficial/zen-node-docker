@@ -4,7 +4,7 @@ MAINTAINER cronic@zensystem.io
 
 SHELL ["/bin/bash", "-c"]
 
-ARG version=2.0.21-bitcore
+ARG version=2.0.21-1-bitcore
 
 ARG release=v${version}
 
