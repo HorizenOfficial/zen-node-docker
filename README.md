@@ -12,7 +12,7 @@
 Release tags:
 * `v2.0.21-1` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/v2.0.21-1/latest/Dockerfile)
 * `v2.0.21-1-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/v2.0.21-1-bitcore/bitcore/Dockerfile)
-* `v2.0.19-1-c27f32a` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)` built from [$TAG:/testing/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/v2.0.19-1-c27f32a/testing/Dockerfile)
+* `v2.1.0-beta1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)` built from [$TAG:/testing/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/v2.1.0-beta1/testing/Dockerfile)
 * `v2.0.16-rc1-bitcore` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/v2.0.16-rc1-bitcore/bitcore-testing/Dockerfile)
 
 #### Usage examples
