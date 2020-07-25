@@ -18,8 +18,8 @@ RUN set -euxo pipefail \
     && curl -Lo /usr/local/share/ca-certificates/lets-encrypt-x3-cross-signed.crt https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt \
     && echo "e446c5e9dbef9d09ac9f7027c034602492437a05ff6c40011d7235fca639c79a  /usr/local/share/ca-certificates/lets-encrypt-x3-cross-signed.crt" | sha256sum -c - \
     && update-ca-certificates \
-    && curl -Lo /root/${package} "https://github.com/ZencashOfficial/zen/releases/download/${release}/${package}" \
-    && curl -Lo /root/${package}.asc "https://github.com/ZencashOfficial/zen/releases/download/${release}/${package}.asc" \
+    && curl -Lo /root/${package} "https://github.com/HorizenOfficial/zen/releases/download/${release}/${package}" \
+    && curl -Lo /root/${package}.asc "https://github.com/HorizenOfficial/zen/releases/download/${release}/${package}.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
     && gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
     gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \

@@ -4,16 +4,16 @@
 
 #### Available tags
 
-* `latest` built from [master:/latest/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/master/latest/Dockerfile)
-* `bitcore` for block explorers built from [master:/bitcore/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/master/bitcore/Dockerfile)
-* `dev` zend pre-release/development versions built from [master:/testing/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/master/testing/Dockerfile)
-* `bitcore-dev` zend bitcore pre-release/development versions built from [master:/bitcore-testing/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/master/bitcore-testing/Dockerfile)
+* `latest` built from [master:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/latest/Dockerfile)
+* `bitcore` for block explorers built from [master:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/bitcore/Dockerfile)
+* `dev` zend pre-release/development versions built from [master:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/testing/Dockerfile)
+* `bitcore-dev` zend bitcore pre-release/development versions built from [master:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/bitcore-testing/Dockerfile)
 
 Release tags:
-* `v2.0.21-1` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/v2.0.21-1/latest/Dockerfile)
-* `v2.0.21-1-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/v2.0.21-1-bitcore/bitcore/Dockerfile)
-* `v2.1.0-beta1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)` built from [$TAG:/testing/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/v2.1.0-beta1/testing/Dockerfile)
-* `v2.0.16-rc1-bitcore` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/ZencashOfficial/zen-node-docker/blob/v2.0.16-rc1-bitcore/bitcore-testing/Dockerfile)
+* `v2.0.21-1` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.21-1/latest/Dockerfile)
+* `v2.0.21-1-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.21-1-bitcore/bitcore/Dockerfile)
+* `v2.1.0-beta1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.1.0-beta1/testing/Dockerfile)
+* `v2.0.16-rc1-bitcore` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.16-rc1-bitcore/bitcore-testing/Dockerfile)
 
 #### Usage examples
 To run, execute `docker run --name zen-node zencash/zen-node`, this will create a minimal zen.conf file in the named volume `/mnt/zen` which is used as zend's data directory and downloads the ZCash trusted setup to the named volume `/mnt/zcash-params`. Once the trusted setup is downloaded and verified zend will start syncing with the blockchain.
@@ -24,16 +24,16 @@ To gain a shell inside of the container, run `docker exec -it zen-node gosu user
 
 To use data/params directories stored on the host instead of docker volumes, mount them into the docker container at `/mnt/zen` and `/mnt/zcash-params` and set `LOCAL_USER_ID` and `LOCAL_GRP_ID` environment variables, e.g. `docker run --name zen-node -e LOCAL_USER_ID=$(id -u) -e LOCAL_GRP_ID=$(id -g) -v "$HOME/.zen:/mnt/zen" -v "$HOME/.zcash-params:/mnt/zcash-params zencash/zen-node`.
 
-To configure zend for use with block explorers, run `docker run --name zen-node -e OPTS="-txindex=1 -addressindex=1 -timestampindex=1 -spentindex=1 -zmqpubrawtx=tcp://*:28332 -zmqpubhashblock=tcp://*:28332" zencash/zen-node:bitcore`, but be aware of [zmq.md#security-warning](https://github.com/ZencashOfficial/zen/blob/master/doc/zmq.md#security-warning) when exposing the zmq port.
+To configure zend for use with block explorers, run `docker run --name zen-node -e OPTS="-txindex=1 -addressindex=1 -timestampindex=1 -spentindex=1 -zmqpubrawtx=tcp://*:28332 -zmqpubhashblock=tcp://*:28332" zencash/zen-node:bitcore`, but be aware of [zmq.md#security-warning](https://github.com/HorizenOfficial/zen/blob/master/doc/zmq.md#security-warning) when exposing the zmq port.
 
 To make zend's P2P port reachable from the outside, run `docker run --name zen-node -p 9033:9033 zencash/zen-node` or to specify a custom port `docker run --name zen-node -p 9876:9876 -e PORT=9876 zencash/zen-node`.
 
-**Note: never expose the RPC port (default 8231) to the internet! By default the RPC interface is not restricted by origin IP, this will change in a future release, see [Configuration options](https://github.com/ZencashOfficial/zen-node-docker#configuration-options) `RPC_ALLOWIP_PRESET` for more.**
+**Note: never expose the RPC port (default 8231) to the internet! By default the RPC interface is not restricted by origin IP, this will change in a future release, see [Configuration options](https://github.com/HorizenOfficial/zen-node-docker#configuration-options) `RPC_ALLOWIP_PRESET` for more.**
 
-For advanced usage, see [Configuration options](https://github.com/ZencashOfficial/zen-node-docker#configuration-options).
+For advanced usage, see [Configuration options](https://github.com/HorizenOfficial/zen-node-docker#configuration-options).
 #### Samples
 
-Systemd unit file and docker compose file samples are available [here](https://github.com/ZencashOfficial/zen-node-docker/tree/master/samples).
+Systemd unit file and docker compose file samples are available [here](https://github.com/HorizenOfficial/zen-node-docker/tree/master/samples).
 #### Configuration options
 
 To configure the most commonly used zend options, the following environment variables can be used:
