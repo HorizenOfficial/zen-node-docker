@@ -2,7 +2,7 @@ FROM zencash/gosu-base:1.11
 
 MAINTAINER cronic@zensystem.io
 
-ARG package=zen-2.0.16-rc1-bitcore-amd64.deb
+ARG package=zen-2.0.22-rc1-bitcore-amd64.deb
 
 COPY $package $package.asc /root/
 
