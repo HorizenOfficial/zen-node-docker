@@ -53,3 +53,12 @@ To configure the most commonly used zend options, the following environment vari
 * `TLS_KEY_PATH` to set the SSL private key path, e.g. `-e TLS_KEY_PATH=/home/user/.zen/ssl.key`
 * `TLS_CERT_PATH` to set the SSL certificate path, e.g. `-e TLS_CERT_PATH=/home/user/.zen/ssl.crt`
 * `CUSTOM_SCRIPT` to run a user defined bash script before launching zend. This is useful to e.g. make backups of wallet.dat each time the container starts. Example: `-e CUSTOM_SCRIPT=/home/user/.zen/backup_wallet.sh`
+
+#### Building locally
+```
+git clone https://github.com/HorizenOfficial/zen-node-docker.git
+cd zen-node-docker
+for folder in latest bitcore testing bitcore-testing; do
+  docker build -t zen-node:$folder -f $folder/Dockerfile .
+done
+```

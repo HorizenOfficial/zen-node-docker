@@ -10,13 +10,15 @@ ARG release=v${version}
 
 ARG package=zen-${version}-amd64.deb
 
+COPY ./entrypoint.sh ./ca/* /root/
+
 RUN set -euxo pipefail \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends dist-upgrade \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install ca-certificates curl wget libgomp1 dnsutils aria2 iproute2 ipv6calc \
-    && curl -Lo /usr/local/share/ca-certificates/lets-encrypt-x3-cross-signed.crt https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt \
-    && echo "e446c5e9dbef9d09ac9f7027c034602492437a05ff6c40011d7235fca639c79a  /usr/local/share/ca-certificates/lets-encrypt-x3-cross-signed.crt" | sha256sum -c - \
+    && cd /root && sha256sum -c /root/checksums.sha256 \
+    && mv /root/*.pem /usr/local/share/ca-certificates/ \
     && update-ca-certificates \
     && curl -Lo /root/${package} "https://github.com/HorizenOfficial/zen/releases/download/${release}/${package}" \
     && curl -Lo /root/${package}.asc "https://github.com/HorizenOfficial/zen/releases/download/${release}/${package}.asc" \
@@ -29,7 +31,9 @@ RUN set -euxo pipefail \
     && ( gpgconf --kill gpg-agent || true ) \
     && rm -r "$GNUPGHOME" \
     && dpkg -i /root/${package} \
-    && rm /root/${package}* \
+    && rm /root/{${package}*,*.sha256} \
+    && mv /root/entrypoint.sh /usr/local/bin/ \
+    && chmod +x /usr/local/bin/entrypoint.sh \
     && apt-get -y clean \
     && apt-get -y autoclean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*.deb
@@ -47,10 +51,6 @@ EXPOSE 8231
 # "-v /path/to/params:/mnt/zcash-params" command line options. Host directory ownership will be changed to the
 # same UID/GID as provided by the "-e LOCAL_USER_ID=" and "-e LOCAL_GRP_ID=" env vars or 9001:9001 if not provided.
 VOLUME ["/mnt/zen", "/mnt/zcash-params"]
-
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-
-RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
