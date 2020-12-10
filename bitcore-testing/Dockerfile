@@ -13,7 +13,7 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends dist-upgrade \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install ca-certificates curl wget libgomp1 dnsutils aria2 iproute2 ipv6calc \
     && cd /root && sha256sum -c /root/checksums.sha256 \
-    && mv /root/*.pem /usr/local/share/ca-certificates/ \
+    && mv /root/*.crt /usr/local/share/ca-certificates/ \
     && update-ca-certificates \
     && export GNUPGHOME="$(mktemp -d)" \
     && gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 4991B669 || \
