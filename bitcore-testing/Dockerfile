@@ -1,6 +1,6 @@
 FROM zencash/gosu-base:1.12
 
-MAINTAINER cronic@zensystem.io
+MAINTAINER cronic@horizen.io
 
 SHELL ["/bin/bash", "-c"]
 
@@ -11,7 +11,7 @@ COPY ./bitcore-testing/$package ./bitcore-testing/$package.asc ./entrypoint.sh .
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends dist-upgrade \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install ca-certificates curl wget libgomp1 dnsutils aria2 iproute2 ipv6calc \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install ca-certificates curl wget libgomp1 dnsutils aria2 iproute2 ipv6calc gnupg2 dirmngr \
     && cd /root && sha256sum -c /root/checksums.sha256 \
     && mv /root/*.crt /usr/local/share/ca-certificates/ \
     && update-ca-certificates \

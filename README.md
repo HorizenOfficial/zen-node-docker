@@ -1,4 +1,4 @@
-![latest release v2.0.22](https://img.shields.io/badge/latest%20release-v2.0.22-brightgreen.svg) ![latest bitcore release v2.0.22-bitcore](https://img.shields.io/badge/latest%20bitcore%20release-v2.0.22--bitcore-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Build Status](https://img.shields.io/docker/build/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
+![latest release v2.0.23](https://img.shields.io/badge/latest%20release-v2.0.23-brightgreen.svg) ![latest bitcore release v2.0.23-bitcore](https://img.shields.io/badge/latest%20bitcore%20release-v2.0.23--bitcore-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Build Status](https://img.shields.io/docker/build/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
 
 ## Docker image for the Horizen Blockchain Daemon - zend
 
@@ -10,8 +10,8 @@
 * `bitcore-dev` zend bitcore pre-release/development versions built from [master:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/bitcore-testing/Dockerfile)
 
 Release tags:
-* `v2.0.22` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.22/latest/Dockerfile)
-* `v2.0.22-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.22-bitcore/bitcore/Dockerfile)
+* `v2.0.23` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.23/latest/Dockerfile)
+* `v2.0.23-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.23-bitcore/bitcore/Dockerfile)
 * `v2.1.0-beta1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.1.0-beta1/testing/Dockerfile)
 * `v2.0.16-rc1-bitcore` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.16-rc1-bitcore/bitcore-testing/Dockerfile)
 
