@@ -16,10 +16,12 @@ RUN apt-get update \
     && mv /root/*.crt /usr/local/share/ca-certificates/ \
     && update-ca-certificates \
     && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 4991B669 || \
-    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys 4991B669 || \
-    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys 4991B669 \
+    && ( gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
+    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
+    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 ) \
     && gpg --batch --verify /root/$package.asc /root/$package \
+    && ( gpgconf --kill dirmngr || true ) \
+    && ( gpgconf --kill gpg-agent || true ) \
     && rm -r "$GNUPGHOME" \
     && dpkg -i /root/$package \
     && rm /root/{${package}*,*.sha256} \
