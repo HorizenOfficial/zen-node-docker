@@ -12,8 +12,8 @@
 Release tags:
 * `v2.0.23` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.23/latest/Dockerfile)
 * `v2.0.23-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.23-bitcore/bitcore/Dockerfile)
-* `v2.1.0-beta1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.1.0-beta1/testing/Dockerfile)
-* `v2.0.16-rc1-bitcore` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.16-rc1-bitcore/bitcore-testing/Dockerfile)
+* `v2.1.0-beta4-6e1224ddf` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.1.0-beta4-6e1224ddf/testing/Dockerfile)
+* `v2.0.16-rc1-bitcore` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.16-rc1-bitcore/bitcore-testing/Dockerfile)
 
 #### Usage examples
 To run, execute `docker run --name zen-node zencash/zen-node`, this will create a minimal zen.conf file in the named volume `/mnt/zen` which is used as zend's data directory and downloads the ZCash trusted setup to the named volume `/mnt/zcash-params`. Once the trusted setup is downloaded and verified zend will start syncing with the blockchain.
