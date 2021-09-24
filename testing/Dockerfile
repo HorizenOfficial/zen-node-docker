@@ -1,10 +1,10 @@
-FROM zencash/gosu-base:1.12
+FROM zencash/gosu-base:1.14
 
 MAINTAINER cronic@horizen.io
 
 SHELL ["/bin/bash", "-c"]
 
-ARG package=zen-2.1.0-beta4-6e1224ddf-amd64.deb
+ARG package=zen-2.2.0-beta1-amd64.deb
 
 COPY ./testing/$package ./testing/$package.asc ./entrypoint.sh ./ca/* /root/
 
