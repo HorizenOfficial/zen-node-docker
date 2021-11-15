@@ -1,6 +1,12 @@
 #!/bin/bash
 set -eo pipefail
 
+# check if this is an unsupported CPU, warn the user and bail
+if [ ! -f "/LEGACY" ] && ! grep -iq adx /proc/cpuinfo && ! grep -iq bmi2 /proc/cpuinfo; then
+  echo "Error: adx and bmi2 CPU flags are not supported on this host. Please use tags 'latest-legacy-cpu', 'bitcore-legacy-cpu', '${version}-legacy-cpu' for support of older CPUs."
+  exit 1
+fi
+
 # Add local user unless root
 # Either use LOCAL_USER_ID/LOCAL_GRP_ID if present or fallback to 9001
 

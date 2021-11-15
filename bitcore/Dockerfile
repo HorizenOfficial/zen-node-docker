@@ -4,7 +4,7 @@ MAINTAINER cronic@horizen.io
 
 SHELL ["/bin/bash", "-c"]
 
-ARG version=2.0.24-bitcore
+ARG version=3.0.0-bitcore
 
 ARG release=v${version}
 

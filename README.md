@@ -1,17 +1,21 @@
-![latest release v2.0.24](https://img.shields.io/badge/latest%20release-v2.0.24-brightgreen.svg) ![latest bitcore release v2.0.24-bitcore](https://img.shields.io/badge/latest%20bitcore%20release-v2.0.24--bitcore-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
+![latest release v3.0.0](https://img.shields.io/badge/latest%20release-v3.0.0-brightgreen.svg) ![latest bitcore release v3.0.0-bitcore](https://img.shields.io/badge/latest%20bitcore%20release-v3.0.0--bitcore-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
 
 ## Docker image for the Horizen Blockchain Daemon - zend
 
 #### Available tags
 
 * `latest` built from [master:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/latest/Dockerfile)
+* `latest-legacy-cpu` built from [master:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/latest-legacy-cpu/Dockerfile) for CPUs not supporting adx/bmi2 flags
 * `bitcore` for block explorers built from [master:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/bitcore/Dockerfile)
+* `bitcore-legacy-cpu` for block explorers built from [master:/bitcore-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/bitcore-legacy-cpu/Dockerfile) for CPUs not supporting adx/bmi2 flags
 * `dev` zend pre-release/development versions built from [master:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/testing/Dockerfile)
 * `bitcore-dev` zend bitcore pre-release/development versions built from [master:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/bitcore-testing/Dockerfile)
 
 Release tags:
-* `v2.0.24` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.24/latest/Dockerfile)
-* `v2.0.24-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v2.0.24-bitcore/bitcore/Dockerfile)
+* `v3.0.0` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0/latest/Dockerfile)
+* `v3.0.0-legacy-cpu` tagged releases in format `vX.Y.Z(-$build)-legacy-cpu` built from [$TAG:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0-legacy-cpu/latest-legacy-cpu/Dockerfile)
+* `v3.0.0-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0-bitcore/bitcore/Dockerfile)
+* `v3.0.0-bitcore-legacy-cpu` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore-legacy-cpu` built from [$TAG:/bitcore-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0-bitcore-legacy-cpu/bitcore-legacy-cpu/Dockerfile)
 * `v3.0.0-beta1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0-beta1/testing/Dockerfile)
 * `v3.0.0-beta1-461f72ef4` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0-beta1-461f72ef4/bitcore-testing/Dockerfile)
 
@@ -58,7 +62,7 @@ To configure the most commonly used zend options, the following environment vari
 ```
 git clone https://github.com/HorizenOfficial/zen-node-docker.git
 cd zen-node-docker
-for folder in latest bitcore testing bitcore-testing; do
+for folder in latest latest-legacy-cpu bitcore bitcore-legacy-cpu testing bitcore-testing; do
   docker build -t zen-node:$folder -f $folder/Dockerfile .
 done
 ```

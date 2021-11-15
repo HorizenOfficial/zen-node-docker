@@ -4,15 +4,16 @@ MAINTAINER cronic@horizen.io
 
 SHELL ["/bin/bash", "-c"]
 
-ARG version=3.0.0
+ARG version=3.0.0-bitcore
 
 ARG release=v${version}
 
-ARG package=zen-${version}-amd64.deb
+ARG package=zen-${version}-legacy-cpu-amd64.deb
 
 COPY ./entrypoint.sh ./ca/* /root/
 
 RUN set -euxo pipefail \
+    && touch /LEGACY \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends dist-upgrade \
