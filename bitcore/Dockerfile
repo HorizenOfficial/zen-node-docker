@@ -4,7 +4,7 @@ MAINTAINER cronic@horizen.io
 
 SHELL ["/bin/bash", "-c"]
 
-ARG version=3.0.1-bitcore
+ARG version=3.0.2-bitcore
 
 ARG release=v${version}
 
@@ -23,11 +23,9 @@ RUN set -euxo pipefail \
     && curl -Lo /root/${package} "https://github.com/HorizenOfficial/zen/releases/download/${release}/${package}" \
     && curl -Lo /root/${package}.asc "https://github.com/HorizenOfficial/zen/releases/download/${release}/${package}.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
-    && ( gpg --batch --keyserver hkp://keyserver.ubuntu.com  --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
-    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
-    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
-    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 ) \
-    && gpg --batch --verify /root/${package}.asc /root/${package} \
+    && ( gpg2 --batch --keyserver hkps://keys.openpgp.org --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
+         gpg2 --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 ) \
+    && gpg2 --batch --verify /root/${package}.asc /root/${package} \
     && ( gpgconf --kill dirmngr || true ) \
     && ( gpgconf --kill gpg-agent || true ) \
     && rm -r "$GNUPGHOME" \
