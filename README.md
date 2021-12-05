@@ -1,4 +1,4 @@
-![latest release v3.0.1](https://img.shields.io/badge/latest%20release-v3.0.1-brightgreen.svg) ![latest bitcore release v3.0.1-bitcore](https://img.shields.io/badge/latest%20bitcore%20release-v3.0.1--bitcore-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
+![latest release v3.0.3](https://img.shields.io/badge/latest%20release-v3.0.3-brightgreen.svg) ![latest bitcore release v3.0.3-bitcore](https://img.shields.io/badge/latest%20bitcore%20release-v3.0.3--bitcore-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
 
 ## Docker image for the Horizen Blockchain Daemon - zend
 
@@ -12,10 +12,10 @@
 * `bitcore-dev` zend bitcore pre-release/development versions built from [master:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/bitcore-testing/Dockerfile)
 
 Release tags:
-* `v3.0.1` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.1/latest/Dockerfile)
-* `v3.0.1-legacy-cpu` tagged releases in format `vX.Y.Z(-$build)-legacy-cpu` built from [$TAG:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.1-legacy-cpu/latest-legacy-cpu/Dockerfile)
-* `v3.0.1-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.1-bitcore/bitcore/Dockerfile)
-* `v3.0.1-bitcore-legacy-cpu` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore-legacy-cpu` built from [$TAG:/bitcore-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.1-bitcore-legacy-cpu/bitcore-legacy-cpu/Dockerfile)
+* `v3.0.3` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.3/latest/Dockerfile)
+* `v3.0.3-legacy-cpu` tagged releases in format `vX.Y.Z(-$build)-legacy-cpu` built from [$TAG:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.3-legacy-cpu/latest-legacy-cpu/Dockerfile)
+* `v3.0.3-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.3-bitcore/bitcore/Dockerfile)
+* `v3.0.3-bitcore-legacy-cpu` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore-legacy-cpu` built from [$TAG:/bitcore-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.3-bitcore-legacy-cpu/bitcore-legacy-cpu/Dockerfile)
 * `v3.0.0-beta1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0-beta1/testing/Dockerfile)
 * `v3.0.0-beta1-461f72ef4` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0-beta1-461f72ef4/bitcore-testing/Dockerfile)
 
