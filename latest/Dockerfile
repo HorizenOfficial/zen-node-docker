@@ -1,10 +1,10 @@
-FROM zencash/gosu-base:1.12
+FROM zencash/gosu-base:1.14
 
 MAINTAINER cronic@horizen.io
 
 SHELL ["/bin/bash", "-c"]
 
-ARG version=3.0.3
+ARG version=3.1.0
 
 ARG release=v${version}
 
