@@ -28,6 +28,8 @@ To gain a shell inside of the container, run `docker exec -it zen-node gosu user
 
 To use data/params directories stored on the host instead of docker volumes, mount them into the docker container at `/mnt/zen` and `/mnt/zcash-params` and set `LOCAL_USER_ID` and `LOCAL_GRP_ID` environment variables, e.g. `docker run --name zen-node -e LOCAL_USER_ID=$(id -u) -e LOCAL_GRP_ID=$(id -g) -v "$HOME/.zen:/mnt/zen" -v "$HOME/.zcash-params:/mnt/zcash-params zencash/zen-node`.
 
+To configure zend for use in testnet mode, run `docker run --name zen-node -e OPTS="-testnet=1" zencash/zen-node`.
+
 To configure zend for use with block explorers, run `docker run --name zen-node -e OPTS="-txindex=1 -addressindex=1 -timestampindex=1 -spentindex=1 -zmqpubrawtx=tcp://*:28332 -zmqpubhashblock=tcp://*:28332" zencash/zen-node:bitcore`, but be aware of [zmq.md#security-warning](https://github.com/HorizenOfficial/zen/blob/master/doc/zmq.md#security-warning) when exposing the zmq port.
 
 To make zend's P2P port reachable from the outside, run `docker run --name zen-node -p 9033:9033 zencash/zen-node` or to specify a custom port `docker run --name zen-node -p 9876:9876 -e PORT=9876 zencash/zen-node`.
@@ -42,7 +44,7 @@ Systemd unit file and docker compose file samples are available [here](https://g
 
 To configure the most commonly used zend options, the following environment variables can be used:
 
-* `OPTS` define any command line options to run zend with, e.g. `-e OPTS="-txindex=1 -debug=1"` Available switches can be displayed with: `docker run --rm -e OPTS="-help" zencash/zen-node`
+* `OPTS` define any command line options to run zend with, e.g. `-e OPTS="-txindex=1 -debug=1 -testnet=1"` Available switches can be displayed with: `docker run --rm -e OPTS="-help" zencash/zen-node`
 * `LOCAL_USER_ID` and `LOCAL_GRP_ID` change ownership of folders mounted into the container at `/mnt/zen` and `/mnt/zcash-params` to `LOCAL_USER_ID:LOCAL_GRP_ID`, if not provided `9001:9001` will be used. With this, host directories can be mounted into the container with the right ownership, zend runs with the same UID:GID inside of the container as specified with `LOCAL_USER_ID` and `LOCAL_GRP_ID`. Example: `docker run --rm -e LOCAL_USER_ID=$(id -u) -e LOCAL_GRP_ID=$(id -g) -v "$HOME/.zen:/mnt/zen" -v "$HOME/.zcash-params:/mnt/zcash-params zencash/zen-node`
 * `PORT` to set the P2P port, e.g. `-e PORT=9033`
 * `RPC_USER` to set the RPC username, e.g. `-e RPC_USER=zenuser`
