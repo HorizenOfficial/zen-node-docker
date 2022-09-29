@@ -1,4 +1,4 @@
-![latest release v3.1.0](https://img.shields.io/badge/latest%20release-v3.1.0-brightgreen.svg) ![latest bitcore release v3.1.0-bitcore](https://img.shields.io/badge/latest%20bitcore%20release-v3.1.0--bitcore-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
+![latest release v3.2.0](https://img.shields.io/badge/latest%20release-v3.2.0-brightgreen.svg) ![latest bitcore release v3.2.0-bitcore](https://img.shields.io/badge/latest%20bitcore%20release-v3.2.0--bitcore-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
 
 ## Docker image for the Horizen Blockchain Daemon - zend
 
@@ -12,10 +12,10 @@
 * `bitcore-dev` zend bitcore pre-release/development versions built from [master:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/bitcore-testing/Dockerfile)
 
 Release tags:
-* `v3.1.0` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.1.0/latest/Dockerfile)
-* `v3.1.0-legacy-cpu` tagged releases in format `vX.Y.Z(-$build)-legacy-cpu` built from [$TAG:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.1.0-legacy-cpu/latest-legacy-cpu/Dockerfile)
-* `v3.1.0-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.1.0-bitcore/bitcore/Dockerfile)
-* `v3.1.0-bitcore-legacy-cpu` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore-legacy-cpu` built from [$TAG:/bitcore-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.1.0-bitcore-legacy-cpu/bitcore-legacy-cpu/Dockerfile)
+* `v3.2.0` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.2.0/latest/Dockerfile)
+* `v3.2.0-legacy-cpu` tagged releases in format `vX.Y.Z(-$build)-legacy-cpu` built from [$TAG:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.2.0-legacy-cpu/latest-legacy-cpu/Dockerfile)
+* `v3.2.0-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.2.0-bitcore/bitcore/Dockerfile)
+* `v3.2.0-bitcore-legacy-cpu` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore-legacy-cpu` built from [$TAG:/bitcore-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.2.0-bitcore-legacy-cpu/bitcore-legacy-cpu/Dockerfile)
 * `v3.0.0-beta1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0-beta1/testing/Dockerfile)
 * `v3.0.0-beta1-461f72ef4` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0-beta1-461f72ef4/bitcore-testing/Dockerfile)
 
@@ -27,6 +27,8 @@ To execute `zen-cli` commands inside of a running container, use `docker exec -i
 To gain a shell inside of the container, run `docker exec -it zen-node gosu user bash`, after that `zen-cli` can be executed as if running natively.
 
 To use data/params directories stored on the host instead of docker volumes, mount them into the docker container at `/mnt/zen` and `/mnt/zcash-params` and set `LOCAL_USER_ID` and `LOCAL_GRP_ID` environment variables, e.g. `docker run --name zen-node -e LOCAL_USER_ID=$(id -u) -e LOCAL_GRP_ID=$(id -g) -v "$HOME/.zen:/mnt/zen" -v "$HOME/.zcash-params:/mnt/zcash-params zencash/zen-node`.
+
+To configure zend for use in testnet mode, run `docker run --name zen-node -e OPTS="-testnet=1" zencash/zen-node`.
 
 To configure zend for use with block explorers, run `docker run --name zen-node -e OPTS="-txindex=1 -addressindex=1 -timestampindex=1 -spentindex=1 -zmqpubrawtx=tcp://*:28332 -zmqpubhashblock=tcp://*:28332" zencash/zen-node:bitcore`, but be aware of [zmq.md#security-warning](https://github.com/HorizenOfficial/zen/blob/master/doc/zmq.md#security-warning) when exposing the zmq port.
 
@@ -42,7 +44,7 @@ Systemd unit file and docker compose file samples are available [here](https://g
 
 To configure the most commonly used zend options, the following environment variables can be used:
 
-* `OPTS` define any command line options to run zend with, e.g. `-e OPTS="-txindex=1 -debug=1"` Available switches can be displayed with: `docker run --rm -e OPTS="-help" zencash/zen-node`
+* `OPTS` define any command line options to run zend with, e.g. `-e OPTS="-txindex=1 -debug=1 -testnet=1"` Available switches can be displayed with: `docker run --rm -e OPTS="-help" zencash/zen-node`
 * `LOCAL_USER_ID` and `LOCAL_GRP_ID` change ownership of folders mounted into the container at `/mnt/zen` and `/mnt/zcash-params` to `LOCAL_USER_ID:LOCAL_GRP_ID`, if not provided `9001:9001` will be used. With this, host directories can be mounted into the container with the right ownership, zend runs with the same UID:GID inside of the container as specified with `LOCAL_USER_ID` and `LOCAL_GRP_ID`. Example: `docker run --rm -e LOCAL_USER_ID=$(id -u) -e LOCAL_GRP_ID=$(id -g) -v "$HOME/.zen:/mnt/zen" -v "$HOME/.zcash-params:/mnt/zcash-params zencash/zen-node`
 * `PORT` to set the P2P port, e.g. `-e PORT=9033`
 * `RPC_USER` to set the RPC username, e.g. `-e RPC_USER=zenuser`
