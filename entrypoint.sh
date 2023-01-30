@@ -38,21 +38,25 @@ else
     export HOME=/root
 fi
 
-# If volumes for zen or zcash-params are present, symlink them to user's home, if not create folders.
-if [ -d "/mnt/zen" ]; then
-    if [ ! -L $HOME/.zen ]; then
-        ln -fs /mnt/zen $HOME/.zen > /dev/null 2>&1
+while ! [ "$(mountpoint /mnt/zen)" ] || ! [ "$(mountpoint /mnt/zcash-params)" ]; do
+  echo "Waiting for /mnt/zen and /mnt/zcash-params to be mounted..."
+  sleep 1
+done
+
+if [ ! -L $HOME/.zen ]; then
+    if [ -d "$HOME/.zen" ]; then
+        rm -rf "$HOME/.zen"
     fi
-else
-    mkdir -p $HOME/.zen
+    ln -fs /mnt/zen $HOME/.zen > /dev/null 2>&1
 fi
-if [ -d "/mnt/zcash-params" ]; then
-    if [ ! -L $HOME/.zcash-params ]; then
-        ln -fs /mnt/zcash-params $HOME/.zcash-params > /dev/null 2>&1
+
+if [ ! -L $HOME/.zcash-params ]; then
+    if [ -d "$HOME/.zcash-params" ]; then
+        rm -rf "$HOME/.zcash-params"
     fi
-else
-    mkdir -p $HOME/.zcash-params
+    ln -fs /mnt/zcash-params $HOME/.zcash-params > /dev/null 2>&1
 fi
+
 
 # Check if we have minimal mainnet and testnet zen.conf files, if not create them.
 if [ ! -e "$HOME/.zen/zen.conf" ]; then
@@ -233,4 +237,3 @@ else
     fi
     exec "$@"
 fi
-
