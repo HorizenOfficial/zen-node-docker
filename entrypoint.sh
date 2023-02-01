@@ -5,6 +5,7 @@ set -eEuo pipefail
 TAG="${TAG:-version_number}"
 if ! [ -f "/LEGACY" ] && ! grep -iq adx /proc/cpuinfo && ! grep -iq bmi2 /proc/cpuinfo; then
   echo "Error: adx and bmi2 CPU flags are not supported on this host. Please use tags '${TAG}-legacy-cpu' for support of older CPUs."
+  sleep 5
   exit 1
 fi
 
@@ -48,10 +49,8 @@ for i in "${!mountpoints[@]}"; do
     sleep 0.5
   done
   # ensure there isn't a directory present with the same name or symlink would be created inside of it
-  if ! [ -L "${targets[i]}" ]; then
-    if [ -d "${targets[i]}" ]; then
-        rm -rf "${targets[i]}"
-    fi
+  if ! [ -L "${targets[i]}" ] && [ -d "${targets[i]}" ]; then
+    rm -rf "${targets[i]}"
   fi
   ln -fs "${mountpoints[i]}" "${targets[i]}"
 done
@@ -69,7 +68,7 @@ export OPTS="-listenonion=0 ${OPTS:-}"
 
 # Logging to stdout or debug.log
 if [ "${LOG:-}" = "STDOUT" ]; then
-  export OPTS="-printtoconsole $OPTS"
+  export OPTS="-printtoconsole ${OPTS}"
 fi
 
 # If RPC settings were provided, update zen.conf files with them.
