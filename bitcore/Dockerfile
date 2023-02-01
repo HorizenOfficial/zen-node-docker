@@ -1,14 +1,16 @@
-FROM zencash/gosu-base:1.14
+FROM zencash/gosu-base:1.16
 
 MAINTAINER cronic@horizen.io
 
 SHELL ["/bin/bash", "-c"]
 
-ARG version=3.2.0-bitcore
+ARG version=3.2.1-bitcore
 
 ARG release=v${version}
 
 ARG package=zen-${version}-amd64.deb
+
+ENV TAG=${release}
 
 COPY ./entrypoint.sh ./ca/* /root/
 
