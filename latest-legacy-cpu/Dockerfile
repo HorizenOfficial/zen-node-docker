@@ -10,6 +10,8 @@ ARG release=v${version}
 
 ARG package=zen-${version}-legacy-cpu-amd64.deb
 
+ENV TAG=${release}
+
 COPY ./entrypoint.sh ./ca/* /root/
 
 RUN set -euxo pipefail \

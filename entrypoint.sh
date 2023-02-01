@@ -1,239 +1,227 @@
 #!/bin/bash
-set -eo pipefail
+set -eEuo pipefail
 
 # check if this is an unsupported CPU, warn the user and bail
-if [ ! -f "/LEGACY" ] && ! grep -iq adx /proc/cpuinfo && ! grep -iq bmi2 /proc/cpuinfo; then
-  echo "Error: adx and bmi2 CPU flags are not supported on this host. Please use tags 'latest-legacy-cpu', 'bitcore-legacy-cpu', '${version}-legacy-cpu' for support of older CPUs."
+TAG="${TAG:-version_number}"
+if ! [ -f "/LEGACY" ] && ! grep -iq adx /proc/cpuinfo && ! grep -iq bmi2 /proc/cpuinfo; then
+  echo "Error: adx and bmi2 CPU flags are not supported on this host. Please use tags '${TAG}-legacy-cpu' for support of older CPUs."
   exit 1
 fi
 
 # Add local user unless root
-# Either use LOCAL_USER_ID/LOCAL_GRP_ID if present or fallback to 9001
+# Either use LOCAL_USER_ID/LOCAL_GRP_ID as provided by -e if present or fallback to 9001
 
-USER_ID=${LOCAL_USER_ID:-9001}
-GRP_ID=${LOCAL_GRP_ID:-9001}
+USER_ID="${LOCAL_USER_ID:-9001}"
+GRP_ID="${LOCAL_GRP_ID:-9001}"
 
-if [ ! "$USER_ID" == "0"  ]; then
-    getent group $GRP_ID > /dev/null 2>&1 || groupadd -g $GRP_ID user
-    id -u user > /dev/null 2>&1 || useradd --shell /bin/bash -u $USER_ID -g $GRP_ID -o -c "" -m user
-    LOCAL_UID=$(id -u user)
-    LOCAL_GID=$(id -g user)
-    if [ ! "$USER_ID" == "$LOCAL_UID" ] || [ ! "$GRP_ID" == "$LOCAL_GID" ]; then
-        echo -e "WARNING: User with differing UID $LOCAL_UID/GID $LOCAL_GID already exists, most likely this container was started before with a different UID/GID. Re-create it to change UID/GID.\n"
-    fi
+if [ "${USER_ID}" -ne 0 ]; then
+  getent group "${GRP_ID}" &> /dev/null || groupadd -g "${GRP_ID}" user
+  id -u user &> /dev/null || useradd --shell /bin/bash -u "${USER_ID}" -g "${GRP_ID}" -o -c "" -m user
+  CURRENT_UID="$(id -u user)"
+  CURRENT_GID="$(id -g user)"
+  if [ "${USER_ID}" != "${CURRENT_UID}" ] || [ "{$GRP_ID}" != "${CURRENT_GID}" ]; then
+    echo -e "WARNING: User with differing UID ${USER_ID}/GID ${GRP_ID} already exists, most likely this container was started before with a different UID/GID. Re-create it to change UID/GID.\n"
+  fi
 else
-    LOCAL_UID=$USER_ID
-    LOCAL_GID=$GRP_ID
-    echo -e "WARNING: Starting container processes as root. This has some security implications and goes against docker best practice.\n"
+  CURRENT_UID="${USER_ID}"
+  CURRENT_GID="${GRP_ID}"
+  echo -e "WARNING: Starting container processes as root. This has some security implications and goes against docker best practice.\n"
 fi
 
-echo -e "Starting with UID/GID : $LOCAL_UID/$LOCAL_GID\n"
+echo -e "Starting with UID/GID : ${CURRENT_UID}/${CURRENT_GID}\n"
 
 # set $HOME
-if [ ! "$USER_ID" == "0"  ]; then
-    export USERNAME=user
-    export HOME=/home/$USERNAME
+if [ "${CURRENT_UID}" -ne 0 ]; then
+  export USERNAME="user"
+  export HOME="/home/${USERNAME}"
 else
-    export USERNAME=root
-    export HOME=/root
+  export USERNAME="root"
+  export HOME="/root"
 fi
 
-while ! [ "$(mountpoint /mnt/zen)" ] || ! [ "$(mountpoint /mnt/zcash-params)" ]; do
-  echo "Waiting for /mnt/zen and /mnt/zcash-params to be mounted..."
-  sleep 1
+# check volume mounts are present, symlink to home dir
+mountpoints=( "/mnt/zen" "/mnt/zcash-params" )
+targets=( "${HOME}/.zen" "${HOME}/.zcash-params" )
+for i in "${!mountpoints[@]}"; do
+  while ! mountpoint "${mountpoints[i]}" &> /dev/null; do
+    echo "Waiting for volume ${mountpoints[i]} to be mounted..."
+    sleep 0.5
+  done
+  # ensure there isn't a directory present with the same name or symlink would be created inside of it
+  if ! [ -L "${targets[i]}" ]; then
+    if [ -d "${targets[i]}" ]; then
+        rm -rf "${targets[i]}"
+    fi
+  fi
+  ln -fs "${mountpoints[i]}" "${targets[i]}"
 done
 
-if [ ! -L $HOME/.zen ]; then
-    if [ -d "$HOME/.zen" ]; then
-        rm -rf "$HOME/.zen"
-    fi
-    ln -fs /mnt/zen $HOME/.zen > /dev/null 2>&1
-fi
-
-if [ ! -L $HOME/.zcash-params ]; then
-    if [ -d "$HOME/.zcash-params" ]; then
-        rm -rf "$HOME/.zcash-params"
-    fi
-    ln -fs /mnt/zcash-params $HOME/.zcash-params > /dev/null 2>&1
-fi
-
-
-# Check if we have minimal mainnet and testnet zen.conf files, if not create them.
-if [ ! -e "$HOME/.zen/zen.conf" ]; then
-    touch $HOME/.zen/zen.conf
-fi
-if [ ! -d "$HOME/.zen/testnet3" ]; then
-    mkdir -p $HOME/.zen/testnet3
-fi
-if [ ! -e "$HOME/.zen/testnet3/zen.conf" ]; then
-    touch $HOME/.zen/testnet3/zen.conf
-fi
-if ! grep -q 'rpcuser' $HOME/.zen/zen.conf ; then
-    echo 'rpcuser=user' >> $HOME/.zen/zen.conf
-fi
-if ! grep -q 'rpcuser' $HOME/.zen/testnet3/zen.conf ; then
-    echo 'rpcuser=user' >> $HOME/.zen/testnet3/zen.conf
-fi
-if ! grep -q 'rpcpassword' $HOME/.zen/zen.conf ; then
-    echo "rpcpassword=`head -c 32 /dev/urandom | base64`" >> $HOME/.zen/zen.conf
-fi
-if ! grep -q 'rpcpassword' $HOME/.zen/testnet3/zen.conf ; then
-    echo "rpcpassword=`head -c 32 /dev/urandom | base64`" >> $HOME/.zen/testnet3/zen.conf
-fi
+# ensure we have minimal mainnet and testnet zen.conf files
+mkdir -p "${HOME}/.zen/testnet3"
+for file in "${HOME}/.zen/zen.conf" "${HOME}/.zen/testnet3/zen.conf"; do
+  touch "${file}"
+  grep -q 'rpcuser' "${file}" || echo 'rpcuser=user' >> "${file}"
+  grep -q 'rpcpassword' "${file}" || echo "rpcpassword=$(head -c 32 /dev/urandom | base64)" >> "${file}"
+done
 
 # Prepend some default command line options to OPTS, user provided values will be appended and take precedence.
-export OPTS="-listenonion=0 $OPTS"
+export OPTS="-listenonion=0 ${OPTS:-}"
 
 # Logging to stdout or debug.log
-if [[ -v LOG ]] && [ "$LOG" == "STDOUT" ]; then
-    export OPTS="-printtoconsole $OPTS"
+if [ "${LOG:-}" = "STDOUT" ]; then
+  export OPTS="-printtoconsole $OPTS"
 fi
 
 # If RPC settings were provided, update zen.conf files with them.
-if [[ -v RPC_USER ]]; then
-    sed -i '/^rpcuser/d' $HOME/.zen/zen.conf $HOME/.zen/testnet3/zen.conf
-    echo "rpcuser="$RPC_USER | tee -a $HOME/.zen/zen.conf >> $HOME/.zen/testnet3/zen.conf
+if [ -n "${RPC_USER:-}" ]; then
+  sed -i '/^rpcuser/d' "${HOME}/.zen/zen.conf" "${HOME}/.zen/testnet3/zen.conf"
+  echo "rpcuser=${RPC_USER}" | tee -a "${HOME}/.zen/zen.conf" >> "${HOME}/.zen/testnet3/zen.conf"
 fi
-if [[ -v RPC_PASSWORD ]]; then
-    sed -i '/^rpcpassword/d' $HOME/.zen/zen.conf $HOME/.zen/testnet3/zen.conf
-    echo "rpcpassword="$RPC_PASSWORD | tee -a $HOME/.zen/zen.conf >> $HOME/.zen/testnet3/zen.conf
+if [ -n "${RPC_PASSWORD:-}" ]; then
+  sed -i '/^rpcpassword/d' "${HOME}/.zen/zen.conf" "${HOME}/.zen/testnet3/zen.conf"
+  echo "rpcpassword=${RPC_PASSWORD}" | tee -a "${HOME}/.zen/zen.conf" >> "${HOME}/.zen/testnet3/zen.conf"
 fi
-if [[ -v RPC_PORT ]]; then
-    sed -i '/^rpcport/d' $HOME/.zen/zen.conf $HOME/.zen/testnet3/zen.conf
-    echo "rpcport="$RPC_PORT | tee -a $HOME/.zen/zen.conf >> $HOME/.zen/testnet3/zen.conf
+if [ -n "${RPC_PORT:-}" ]; then
+  sed -i '/^rpcport/d' "${HOME}/.zen/zen.conf" "${HOME}/.zen/testnet3/zen.conf"
+  echo "rpcport=${RPC_PORT}" | tee -a "${HOME}/.zen/zen.conf" >> "${HOME}/.zen/testnet3/zen.conf"
 fi
 
 # Allow changing of P2P port via "-e PORT="
-if [[ -v PORT ]]; then
-    sed -i '/^port/d' $HOME/.zen/zen.conf $HOME/.zen/testnet3/zen.conf
-    echo "port="$PORT | tee -a $HOME/.zen/zen.conf >> $HOME/.zen/testnet3/zen.conf
+if [ -n "${PORT:-}" ]; then
+  sed -i '/^port/d' "${HOME}/.zen/zen.conf" "${HOME}/.zen/testnet3/zen.conf"
+  echo "port=${PORT}" | tee -a "${HOME}/.zen/zen.conf" >> "${HOME}/.zen/testnet3/zen.conf"
 fi
 
 # RPC_ALLOWIP_PRESET one of ANY|SUBNET|LOCALHOST, default ANY, example: "-e RPC_ALLOWIP_PRESET=SUBNET"
 
 # Default to ANY to keep existring behavior, NOTE default will change to LOCALHOST in a future release
-if [[ ! -v RPC_ALLOWIP_PRESET ]]; then
-    export RPC_ALLOWIP_PRESET=ANY
+if [ -z "${RPC_ALLOWIP_PRESET:-}" ]; then
+    export RPC_ALLOWIP_PRESET="ANY"
 fi
 
-TO_ALLOW=()
+to_allow=()
+ip4=()
+ip6=()
 
-if [ "$RPC_ALLOWIP_PRESET" == "ANY" ]; then
-    # Any v4 and v6
-    TO_ALLOW+=("0.0.0.0/0")
-    TO_ALLOW+=("::/0")
-elif [ "$RPC_ALLOWIP_PRESET" == "SUBNET" ]; then
-    IP4=( $(ip -o -f inet route show | awk '/scope link/ {print $1}' || true) )
-    IP6=( $(ip -o -f inet6 route show | awk '/proto kernel/ {print $1}' | grep "/" || true) )
-    if (( ${#IP4[@]} )); then
-        for net in "${IP4[@]}"; do
-            # only add local subnets
-            if ipv6calc -qim "$net" | grep "IPV4_TYPE" | grep -q "local"; then
-                TO_ALLOW+=( "$net" )
-            fi
-        done
-    fi
-    if (( ${#IP6[@]} )); then
-        for net in "${IP6[@]}"; do
-            # only add local subnets
-            if ipv6calc -qim "$net" | grep "IPV6_TYPE" | grep -q "local"; then
-                TO_ALLOW+=( "$net" )
-            fi
-        done
-    fi
+if [ "${RPC_ALLOWIP_PRESET}" = "ANY" ]; then
+  # Any v4 and v6
+  to_allow+=("0.0.0.0/0")
+  to_allow+=("::/0")
+elif [ "${RPC_ALLOWIP_PRESET}" = "SUBNET" ]; then
+  mapfile -t ip4 < <(ip -o -f inet route show | awk '/scope link/ {print $1}' || true)
+  mapfile -t ip6 < <(ip -o -f inet6 route show | awk '/proto kernel/ {print $1}' | grep "/" || true)
+  if (( ${#ip4[@]} )); then
+    for net in "${ip4[@]}"; do
+      # only add local subnets
+      if ipv6calc -qim "${net}" | grep "IPV4_TYPE" | grep -q "local"; then
+        to_allow+=( "${net}" )
+      fi
+    done
+  fi
+  if (( ${#ip6[@]} )); then
+    for net in "${ip6[@]}"; do
+      # only add local subnets
+      if ipv6calc -qim "${net}" | grep "IPV6_TYPE" | grep -q "local"; then
+        to_allow+=( "${net}" )
+      fi
+    done
+  fi
 fi
 
 # RPC_ALLOWIP, comma separated string of one or more IPs/subnets, no spaces, valid are a single IP (e.g. 1.2.3.4),
 # a network/netmask (e.g. 1.2.3.4/255.255.255.0) or a network/CIDR (e.g. 1.2.3.4/24).
 # Example: -e RPC_ALLOWIP="10.10.10.1,192.168.0.1/24,192.168.1.1/255.255.255.0"
-if [[ -v RPC_ALLOWIP ]]; then
-    for net in $(echo "$RPC_ALLOWIP" | tr "," " "); do
-        TO_ALLOW+=( "$net" )
-    done
+to_append=()
+if [ -n "${RPC_ALLOWIP:-}" ]; then
+  mapfile -t to_append <<< "$(tr ',' '\n' <<< "${RPC_ALLOWIP}")"
+  to_allow+=( "${to_append[@]}" )
 fi
 
 # Set rpcallowip= in zen.conf
-if (( ${#TO_ALLOW[@]} )); then
-    sed -i '/^rpcallowip/d' $HOME/.zen/zen.conf $HOME/.zen/testnet3/zen.conf
-    echo -e "Allowing RPC access from: ${TO_ALLOW[@]}\n"
-    for net in "${TO_ALLOW[@]}"; do
-        echo "rpcallowip=$net" | tee -a $HOME/.zen/zen.conf >> $HOME/.zen/testnet3/zen.conf
-    done
+if (( ${#to_allow[@]} )); then
+  sed -i '/^rpcallowip/d' "${HOME}/.zen/zen.conf" "${HOME}/.zen/testnet3/zen.conf"
+  echo -e "Allowing RPC access from: ${to_allow[*]}\n"
+  for net in "${to_allow[@]}"; do
+    echo "rpcallowip=${net}" | tee -a "${HOME}/.zen/zen.conf" >> "${HOME}/.zen/testnet3/zen.conf"
+  done
 fi
 
 # EXTERNAL_IP, comma separated string of one or more of IPv4, IPv6 or the string "DETECT", no spaces.
 # Example: -e EXTERNAL_IP="DETECT,1.1.1.1,2606:4700:4700::1111"
-EXTERNAL=()
-if [[ -v EXTERNAL_IP ]]; then
-    for entry in $(echo "$EXTERNAL_IP" | tr "," " "); do
-        if [ "$entry" == "DETECT" ]; then
-            EXTERNAL+=( $(dig -4 +short +time=2 @resolver1.opendns.com A myip.opendns.com | grep -v ";" || true) )
-            EXTERNAL+=( $(dig -6 +short +time=2 @resolver1.opendns.com AAAA myip.opendns.com  | grep -v ";" || true) )
-        else
-            EXTERNAL+=( "$entry" )
-        fi
-    done
+external=()
+if [ -n "${EXTERNAL_IP:-}" ]; then
+  mapfile -t external <<< "$(tr ',' '\n' <<< "${EXTERNAL_IP}")"
+  for i in "${!external[@]}"; do
+    if [ "${external[i]}" = "DETECT" ]; then
+      unset 'external[i]'
+      mapfile -t -O "${#external[@]}" external < <(dig -4 +short +time=2 @resolver1.opendns.com A myip.opendns.com | grep -v ";" || true)
+      mapfile -t -O "${#external[@]}" external < <(dig -6 +short +time=2 @resolver1.opendns.com AAAA myip.opendns.com  | grep -v ";" || true)
+    fi
+  done
 fi
 
 # Set externalip= in zen.conf
-if (( ${#EXTERNAL[@]} )); then
-    sed -i '/^externalip/d' $HOME/.zen/zen.conf $HOME/.zen/testnet3/zen.conf
-    echo -e "Setting externalip to: ${EXTERNAL[@]}\n"
-    for ip in "${EXTERNAL[@]}"; do
-        echo "externalip=$ip" | tee -a $HOME/.zen/zen.conf >> $HOME/.zen/testnet3/zen.conf
-    done
+if (( ${#external[@]} )); then
+  sed -i '/^externalip/d' "${HOME}/.zen/zen.conf" "${HOME}/.zen/testnet3/zen.conf"
+  echo -e "Setting externalip to: ${external[*]}\n"
+  for ip in "${external[@]}"; do
+    echo "externalip=${ip}" | tee -a "${HOME}/.zen/zen.conf" >> "${HOME}/.zen/testnet3/zen.conf"
+  done
 fi
 
 # ADDNODE comma separated string of one or more nodes to try to connect to in format IPv4:PORT, [IPv6]:PORT or FQDN:PORT, no spaces.
 # Example: ADDNODE="1.1.1.1:9033,[2606:4700:4700::1111]:9033,mainnet.horizen.global:9033"
 
 # Set addnode= in zen.conf
-if [[ ! -z "$ADDNODE" ]]; then
-    sed -i '/^addnode/d' $HOME/.zen/zen.conf $HOME/.zen/testnet3/zen.conf
-    echo -e "Adding addnode= for: $(echo "$ADDNODE" | tr "," " " )\n"
-    for node in $(echo "$ADDNODE" | tr "," " "); do
-        echo "addnode=$node" | tee -a $HOME/.zen/zen.conf >> $HOME/.zen/testnet3/zen.conf
-    done
+addnode=()
+if [ -n "${ADDNODE:-}" ]; then
+  sed -i '/^addnode/d' "${HOME}/.zen/zen.conf" "${HOME}/.zen/testnet3/zen.conf"
+  mapfile -t addnode <<< "$(tr ',' '\n' <<< "${ADDNODE}")"
+  echo -e "Adding addnode= for: ${addnode[*]}\n"
+  for node in "${addnode[@]}"; do
+    echo "addnode=${node}" | tee -a "${HOME}/.zen/zen.conf" >> "${HOME}/.zen/testnet3/zen.conf"
+  done
 fi
 
 # TLS_KEY_PATH path to SSL private key inside of the container
 # Example: TLS_KEY_PATH="/home/user/.zen/ssl.key"
 
 # Set tlskeypath= in zen.conf
-if [[ ! -z "$TLS_KEY_PATH" ]]; then
-    sed -i '/^tlskeypath/d' $HOME/.zen/zen.conf $HOME/.zen/testnet3/zen.conf
-    echo "tlskeypath=${TLS_KEY_PATH}" | tee -a $HOME/.zen/zen.conf >> $HOME/.zen/testnet3/zen.conf
+if [ -n "${TLS_KEY_PATH:-}" ]; then
+  [ -f "${TLS_KEY_PATH}" ] || { echo "Error: no TLS key file found at ${TLS_KEY_PATH}"; sleep 5; exit 1; }
+  sed -i '/^tlskeypath/d' "${HOME}/.zen/zen.conf" "${HOME}/.zen/testnet3/zen.conf"
+  echo "tlskeypath=${TLS_KEY_PATH}" | tee -a "${HOME}/.zen/zen.conf" >> "${HOME}/.zen/testnet3/zen.conf"
 fi
 
 # TLS_CERT_PATH path to SSL certificate inside of the container
 # Example: TLS_CERT_PATH="/home/user/.zen/ssl.crt"
 
 # Set tlscertpath= in zen.conf
-if [[ ! -z "$TLS_CERT_PATH" ]]; then
-    sed -i '/^tlscertpath/d' $HOME/.zen/zen.conf $HOME/.zen/testnet3/zen.conf
-    echo "tlscertpath=${TLS_CERT_PATH}" | tee -a $HOME/.zen/zen.conf >> $HOME/.zen/testnet3/zen.conf
+if [ -n "${TLS_CERT_PATH:-}" ]; then
+  [ -f "${TLS_CERT_PATH}" ] || { echo "Error: no TLS cert file found at ${TLS_CERT_PATH}"; sleep 5; exit 1; }
+  sed -i '/^tlscertpath/d' "${HOME}/.zen/zen.conf" "${HOME}/.zen/testnet3/zen.conf"
+  echo "tlscertpath=${TLS_CERT_PATH}" | tee -a "${HOME}/.zen/zen.conf" >> "${HOME}/.zen/testnet3/zen.conf"
 fi
 
 # Fix ownership of the created files/folders
-chown -R $LOCAL_UID:$LOCAL_GID $HOME /mnt/zen /mnt/zcash-params
+find "${mountpoints[@]}" -writable -print0 | xargs -0 -I{} -P64 -n1 chown -f "${CURRENT_UID}":"${CURRENT_GID}" "{}"
 
 # CUSTOM_SCRIPT, execute user provided script before starting zend, e.g. to backup wallets
-if [[ ! -z "$CUSTOM_SCRIPT" ]]; then
-    chmod +x "${CUSTOM_SCRIPT}"
-    echo "Running custom script: ${CUSTOM_SCRIPT}"
-    bash -c "${CUSTOM_SCRIPT}"
+if [ -n "${CUSTOM_SCRIPT:-}" ]; then
+  chmod +x "${CUSTOM_SCRIPT}"
+  echo "Running custom script: ${CUSTOM_SCRIPT}"
+  bash -c "${CUSTOM_SCRIPT}"
 fi
 
-if [ ! "$USER_ID" == "0"  ]; then
-    if [[ "$1" == zend ]]; then
-        /usr/local/bin/gosu user zen-fetch-params
-        exec /usr/local/bin/gosu user /bin/bash -c "$@ $OPTS"
-    fi
-    exec /usr/local/bin/gosu user "$@"
-else
-    if [[ "$1" == zend ]]; then
-        zen-fetch-params
-        exec /bin/bash -c "$@ $OPTS"
-    fi
-    exec "$@"
+# convert $OPTS into array
+mapfile -t OPTS < <(sed 's/  */ /g; s/ $//g' <<< "${OPTS}" | tr ' ' '\n')
+
+gosu_cmd=""
+[ "${CURRENT_UID}" -ne 0 ] && gosu_cmd="/usr/local/bin/gosu user"
+if [ "$1" = "zend" ]; then
+  $gosu_cmd zen-fetch-params
+  for arg in "${OPTS[@]}"; do
+    set -- "$@" "${arg}"
+  done
 fi
+exec $gosu_cmd "$@"
