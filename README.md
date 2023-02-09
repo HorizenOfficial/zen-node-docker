@@ -16,8 +16,10 @@ Release tags:
 * `v3.2.1-legacy-cpu` tagged releases in format `vX.Y.Z(-$build)-legacy-cpu` built from [$TAG:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.2.1-legacy-cpu/latest-legacy-cpu/Dockerfile)
 * `v3.2.1-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.2.1-bitcore/bitcore/Dockerfile)
 * `v3.2.1-bitcore-legacy-cpu` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore-legacy-cpu` built from [$TAG:/bitcore-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.2.1-bitcore-legacy-cpu/bitcore-legacy-cpu/Dockerfile)
-* `v3.0.0-beta1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0-beta1/testing/Dockerfile)
-* `v3.0.0-beta1-461f72ef4` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.0.0-beta1-461f72ef4/bitcore-testing/Dockerfile)
+* `v4.0.0-beta3` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.0.0-beta3/testing/Dockerfile)
+* `v4.0.0-beta3-legacy-cpu` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-legacy-cpu` built from [$TAG:/testing-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.0.0-beta3-legacy-cpu/testing-legacy-cpu/Dockerfile)
+* `v4.0.0-beta3-bitcore` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.0.0-beta3-bitcore/bitcore-testing/Dockerfile)
+* `v4.0.0-beta3-bitcore-legacy-cpu` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-bitcore-legacy-cpu` built from [$TAG:/bitcore-testing-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.0.0-beta3-bitcore-legacy-cpu/bitcore-testing/Dockerfile)
 
 #### Usage examples
 To run, execute `docker run --name zen-node zencash/zen-node`, this will create a minimal zen.conf file in the named volume `/mnt/zen` which is used as zend's data directory and downloads the ZCash trusted setup to the named volume `/mnt/zcash-params`. Once the trusted setup is downloaded and verified zend will start syncing with the blockchain.
@@ -64,7 +66,7 @@ To configure the most commonly used zend options, the following environment vari
 ```
 git clone https://github.com/HorizenOfficial/zen-node-docker.git
 cd zen-node-docker
-for folder in latest latest-legacy-cpu bitcore bitcore-legacy-cpu testing bitcore-testing; do
+for folder in latest latest-legacy-cpu bitcore bitcore-legacy-cpu testing testing-legacy-cpu bitcore-testing bitcore-testing-legacy-cpu; do
   docker build -t zen-node:$folder -f $folder/Dockerfile .
 done
 ```
