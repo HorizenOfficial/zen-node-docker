@@ -52,7 +52,7 @@ for i in "${!mountpoints[@]}"; do
   if ! [ -L "${targets[i]}" ] && [ -d "${targets[i]}" ]; then
     rm -rf "${targets[i]}"
   fi
-  ln -fs "${mountpoints[i]}" "${targets[i]}"
+  ln -fsn "${mountpoints[i]}" "${targets[i]}"
 done
 
 # ensure we have minimal mainnet and testnet zen.conf files
