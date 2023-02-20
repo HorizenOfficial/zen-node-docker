@@ -8,7 +8,8 @@ ARG package=zen-4.0.0-beta3-amd64.deb
 
 COPY ./testing/$package ./testing/$package.asc ./entrypoint.sh ./ca/* /root/
 
-RUN apt-get update \
+RUN set -eEuo pipefail \
+    && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends dist-upgrade \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install ca-certificates curl wget libgomp1 dnsutils aria2 iproute2 ipv6calc gnupg2 dirmngr \
