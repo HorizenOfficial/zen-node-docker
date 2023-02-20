@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-c"]
 
 ARG package=zen-4.0.0-beta3-amd64.deb
 
-COPY ./testing/$package ./testing/$package.asc ./entrypoint.sh ./ca/* /root/
+COPY ./testing-legacy-cpu/$package ./testing-legacy-cpu/$package.asc ./entrypoint.sh ./ca/* /root/
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
