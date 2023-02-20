@@ -14,7 +14,7 @@ ENV TAG=${release}
 
 COPY ./entrypoint.sh ./ca/* /root/
 
-RUN set -euxo pipefail \
+RUN set -eEuo pipefail \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install apt-utils \
     && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends dist-upgrade \
