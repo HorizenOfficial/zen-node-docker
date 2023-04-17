@@ -20,7 +20,7 @@ if [ "${USER_ID}" -ne 0 ]; then
   id -u user &> /dev/null || useradd --shell /bin/bash -u "${USER_ID}" -g "${GRP_ID}" -o -c "" -m user
   CURRENT_UID="$(id -u user)"
   CURRENT_GID="$(id -g user)"
-  if [ "${USER_ID}" != "${CURRENT_UID}" ] || [ "{$GRP_ID}" != "${CURRENT_GID}" ]; then
+  if [ "${USER_ID}" != "${CURRENT_UID}" ] || [ "${GRP_ID}" != "${CURRENT_GID}" ]; then
     echo -e "WARNING: User with differing UID ${USER_ID}/GID ${GRP_ID} already exists, most likely this container was started before with a different UID/GID. Re-create it to change UID/GID.\n"
   fi
 else
