@@ -1,4 +1,4 @@
-![latest release v3.3.1](https://img.shields.io/badge/latest%20release-v3.3.1-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
+![latest release v3.3.1](https://img.shields.io/badge/latest%20release-v3.3.1-brightgreen.svg) ![latest bitcore release v3.3.1-bitcore](https://img.shields.io/badge/latest%20bitcore%20release-v3.3.1--bitcore-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
 
 ## Docker image for the Horizen Blockchain Daemon - zend
 
@@ -10,6 +10,8 @@ Starting from `v4.0.0-rc3`, zen-node docker containers will be released in only 
 
 * `latest` built from [main:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/main/latest/Dockerfile)
 * `latest-legacy-cpu` built from [main:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/main/latest-legacy-cpu/Dockerfile) for CPUs not supporting adx/bmi2 flags
+* `bitcore` for block explorers built from [v3.3.1-bitcore:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.3.1-bitcore/bitcore/Dockerfile)
+* `bitcore-legacy-cpu` for block explorers built from [v3.3.1-bitcore-legacy-cpu:/bitcore-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.3.1-bitcore-legacy-cpu/bitcore-legacy-cpu/Dockerfile) for CPUs not supporting adx/bmi2 flags
 * `dev` zend pre-release/development versions built from [main:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/main/testing/Dockerfile)
 * `dev-legacy-cpu` zend pre-release/development versions built from [main:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/main/testing/Dockerfile) for CPUs not supporting adx/bmi2 flags
 
