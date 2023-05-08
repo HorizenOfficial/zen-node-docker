@@ -2,24 +2,26 @@
 
 ## Docker image for the Horizen Blockchain Daemon - zend
 
+#### Notes
+
+Starting from `v4.0.0-rc3`, zen-node docker containers will be released in only one version, which includes the AddressIndexing features that were previously only available in the `bitcore` tags. This means that new `bitcore*` tags for block explorers will not be published anymore, please use the normal tags for block explorers starting with [v4.0.0-rc3](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.0.0-rc3/testing/Dockerfile)
+
 #### Available tags
 
-* `latest` built from [master:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/latest/Dockerfile)
-* `latest-legacy-cpu` built from [master:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/latest-legacy-cpu/Dockerfile) for CPUs not supporting adx/bmi2 flags
-* `bitcore` for block explorers built from [master:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/bitcore/Dockerfile)
-* `bitcore-legacy-cpu` for block explorers built from [master:/bitcore-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/bitcore-legacy-cpu/Dockerfile) for CPUs not supporting adx/bmi2 flags
-* `dev` zend pre-release/development versions built from [master:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/testing/Dockerfile)
-* `bitcore-dev` zend bitcore pre-release/development versions built from [master:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/master/bitcore-testing/Dockerfile)
+* `latest` built from [main:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/main/latest/Dockerfile)
+* `latest-legacy-cpu` built from [main:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/main/latest-legacy-cpu/Dockerfile) for CPUs not supporting adx/bmi2 flags
+* `bitcore` for block explorers built from [v3.3.1-bitcore:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.3.1-bitcore/bitcore/Dockerfile)
+* `bitcore-legacy-cpu` for block explorers built from [v3.3.1-bitcore-legacy-cpu:/bitcore-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.3.1-bitcore-legacy-cpu/bitcore-legacy-cpu/Dockerfile) for CPUs not supporting adx/bmi2 flags
+* `dev` zend pre-release/development versions built from [main:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/main/testing/Dockerfile)
+* `dev-legacy-cpu` zend pre-release/development versions built from [main:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/main/testing/Dockerfile) for CPUs not supporting adx/bmi2 flags
 
 Release tags:
 * `v3.3.1` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.3.1/latest/Dockerfile)
 * `v3.3.1-legacy-cpu` tagged releases in format `vX.Y.Z(-$build)-legacy-cpu` built from [$TAG:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.3.1-legacy-cpu/latest-legacy-cpu/Dockerfile)
 * `v3.3.1-bitcore` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore` built from [$TAG:/bitcore/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.3.1-bitcore/bitcore/Dockerfile)
 * `v3.3.1-bitcore-legacy-cpu` tagged bitcore releases for block explorers in format `vX.Y.Z(-$build)-bitcore-legacy-cpu` built from [$TAG:/bitcore-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v3.3.1-bitcore-legacy-cpu/bitcore-legacy-cpu/Dockerfile)
-* `v4.0.0-rc1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.0.0-rc1/testing/Dockerfile)
-* `v4.0.0-rc1-legacy-cpu` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-legacy-cpu` built from [$TAG:/testing-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.0.0-rc1-legacy-cpu/testing-legacy-cpu/Dockerfile)
-* `v4.0.0-rc1-bitcore` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-bitcore` built from [$TAG:/bitcore-testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.0.0-rc1-bitcore/bitcore-testing/Dockerfile)
-* `v4.0.0-rc1-bitcore-legacy-cpu` bitcore pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-bitcore-legacy-cpu` built from [$TAG:/bitcore-testing-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.0.0-rc1-bitcore-legacy-cpu/bitcore-testing/Dockerfile)
+* `v4.0.0-rc3` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.0.0-rc3/testing/Dockerfile)
+* `v4.0.0-rc3-legacy-cpu` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX)(|-committish)-legacy-cpu` built from [$TAG:/testing-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.0.0-rc3-legacy-cpu/testing-legacy-cpu/Dockerfile)
 
 #### Usage examples
 To run, execute `docker run --name zen-node zencash/zen-node`, this will create a minimal zen.conf file in the named volume `/mnt/zen` which is used as zend's data directory and downloads the ZCash trusted setup to the named volume `/mnt/zcash-params`. Once the trusted setup is downloaded and verified zend will start syncing with the blockchain.
@@ -32,7 +34,7 @@ To use data/params directories stored on the host instead of docker volumes, mou
 
 To configure zend for use in testnet mode, run `docker run --name zen-node -e OPTS="-testnet=1" zencash/zen-node`.
 
-To configure zend for use with block explorers, run `docker run --name zen-node -e OPTS="-txindex=1 -addressindex=1 -timestampindex=1 -spentindex=1 -zmqpubrawtx=tcp://*:28332 -zmqpubhashblock=tcp://*:28332" zencash/zen-node:bitcore`, but be aware of [zmq.md#security-warning](https://github.com/HorizenOfficial/zen/blob/master/doc/zmq.md#security-warning) when exposing the zmq port.
+To configure zend for use with block explorers, run `docker run --name zen-node -e OPTS="-txindex=1 -addressindex=1 -timestampindex=1 -spentindex=1 -zmqpubrawtx=tcp://*:28332 -zmqpubhashblock=tcp://*:28332" zencash/zen-node:bitcore`, but be aware of [zmq.md#security-warning](https://github.com/HorizenOfficial/zen/blob/main/doc/zmq.md#security-warning) when exposing the zmq port.
 
 To make zend's P2P port reachable from the outside, run `docker run --name zen-node -p 9033:9033 zencash/zen-node` or to specify a custom port `docker run --name zen-node -p 9876:9876 -e PORT=9876 zencash/zen-node`.
 
@@ -41,7 +43,7 @@ To make zend's P2P port reachable from the outside, run `docker run --name zen-n
 For advanced usage, see [Configuration options](https://github.com/HorizenOfficial/zen-node-docker#configuration-options).
 #### Samples
 
-Systemd unit file and docker compose file samples are available [here](https://github.com/HorizenOfficial/zen-node-docker/tree/master/samples).
+Systemd unit file and docker compose file samples are available [here](https://github.com/HorizenOfficial/zen-node-docker/tree/main/samples).
 #### Configuration options
 
 To configure the most commonly used zend options, the following environment variables can be used:

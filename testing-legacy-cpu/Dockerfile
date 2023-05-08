@@ -4,7 +4,7 @@ MAINTAINER cronic@horizen.io
 
 SHELL ["/bin/bash", "-c"]
 
-ARG package=zen-4.0.0-rc1-legacy-cpu-amd64.deb
+ARG package=zen-4.0.0-rc3-legacy-cpu-amd64.deb
 
 COPY ./testing-legacy-cpu/$package ./testing-legacy-cpu/$package.asc ./entrypoint.sh ./ca/* /root/
 
