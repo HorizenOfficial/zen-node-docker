@@ -1,10 +1,10 @@
-FROM zencash/gosu-base:1.16
+FROM zencash/gosu-base:1.16-focal
 
 MAINTAINER cronic@horizen.io
 
 SHELL ["/bin/bash", "-c"]
 
-ARG package=zen-4.0.0-rc3-legacy-cpu-amd64.deb
+ARG package=zen-4.1.0-wip1-legacy-cpu-amd64.deb
 
 COPY ./testing-legacy-cpu/$package ./testing-legacy-cpu/$package.asc ./entrypoint.sh ./ca/* /root/
 
@@ -18,10 +18,10 @@ RUN set -eEuo pipefail \
     && mv /root/*.crt /usr/local/share/ca-certificates/ \
     && update-ca-certificates \
     && export GNUPGHOME="$(mktemp -d)" \
-    && ( gpg --batch --keyserver hkp://keyserver.ubuntu.com  --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
-    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
-    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 || \
-    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 ) \
+    && ( gpg --batch --keyserver hkp://keyserver.ubuntu.com  --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 c07b19078bb6da872c8a0015b173be29fd0df36d || \
+    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 c07b19078bb6da872c8a0015b173be29fd0df36d || \
+    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 c07b19078bb6da872c8a0015b173be29fd0df36d || \
+    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys 219F55740BBF7A1CE368BA45FB7053CE4991B669 c07b19078bb6da872c8a0015b173be29fd0df36d ) \
     && gpg --batch --verify /root/$package.asc /root/$package \
     && ( gpgconf --kill dirmngr || true ) \
     && ( gpgconf --kill gpg-agent || true ) \
