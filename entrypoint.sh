@@ -153,8 +153,8 @@ if [ -n "${EXTERNAL_IP:-}" ]; then
   for i in "${!external[@]}"; do
     if [ "${external[i]}" = "DETECT" ]; then
       unset 'external[i]'
-      mapfile -t -O "${#external[@]}" external < <(dig -4 +short +time=2 @resolver1.opendns.com A myip.opendns.com | grep -v ";" || true)
-      mapfile -t -O "${#external[@]}" external < <(dig -6 +short +time=2 @resolver1.opendns.com AAAA myip.opendns.com  | grep -v ";" || true)
+      mapfile -t -O "${#external[@]}" external < <(dig -4 +short +time=2 @resolver1.opendns.com A myip.opendns.com | grep -v ";" | grep -v "^$" || true)
+      mapfile -t -O "${#external[@]}" external < <(dig -6 +short +time=2 @resolver1.opendns.com AAAA myip.opendns.com  | grep -v ";" | grep -v "^$" || true)
     fi
   done
 fi
