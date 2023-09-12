@@ -3,7 +3,7 @@ set -eEuo pipefail
 
 # check if this is an unsupported CPU, warn the user and bail
 TAG="${TAG:-version_number}"
-if ! [ -f "/LEGACY" ] && ! grep -iq adx /proc/cpuinfo && ! grep -iq bmi2 /proc/cpuinfo; then
+if ! [ -f "/LEGACY" ] && ( ! grep -iq adx /proc/cpuinfo || ! grep -iq bmi2 /proc/cpuinfo ); then
   echo "Error: adx and bmi2 CPU flags are not supported on this host. Please use tags '${TAG}-legacy-cpu' for support of older CPUs."
   sleep 5
   exit 1
