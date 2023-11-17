@@ -1,4 +1,4 @@
-![latest release v4.1.0](https://img.shields.io/badge/latest%20release-v4.1.0-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
+![latest release v4.1.1](https://img.shields.io/badge/latest%20release-v4.1.1-brightgreen.svg) ![Docker Automated build](https://img.shields.io/docker/automated/zencash/zen-node.svg) ![Docker Stars](https://img.shields.io/docker/stars/zencash/zen-node.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/zencash/zen-node.svg)
 
 ## Docker image for the Horizen Blockchain Daemon - zend
 
@@ -14,8 +14,8 @@ Starting from `v4.0.0-rc3`, zen-node docker containers will be released in only 
 * `dev-legacy-cpu` zend pre-release/development versions built from [main:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/main/testing/Dockerfile) for CPUs not supporting adx/bmi2 flags
 
 Release tags:
-* `v4.1.0` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.1.0/latest/Dockerfile)
-* `v4.1.0-legacy-cpu` tagged releases in format `vX.Y.Z(-$build)-legacy-cpu` built from [$TAG:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.1.0-legacy-cpu/latest-legacy-cpu/Dockerfile)
+* `v4.1.1` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.1.1/latest/Dockerfile)
+* `v4.1.1-legacy-cpu` tagged releases in format `vX.Y.Z(-$build)-legacy-cpu` built from [$TAG:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.1.1-legacy-cpu/latest-legacy-cpu/Dockerfile)
 * `v4.1.0-rc1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX|wipX)(|-committish)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.1.0-rc1/testing/Dockerfile)
 * `v4.1.0-rc1-legacy-cpu` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX|wipX)(|-committish)-legacy-cpu` built from [$TAG:/testing-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.1.0-rc1-legacy-cpu/testing-legacy-cpu/Dockerfile)
 
