@@ -1,4 +1,4 @@
-FROM zencash/gosu-base:1.16-focal
+FROM zencash/gosu-base:1.17-focal
 
 MAINTAINER cronic@horizen.io
 
