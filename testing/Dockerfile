@@ -4,7 +4,7 @@ MAINTAINER cronic@horizen.io
 
 SHELL ["/bin/bash", "-c"]
 
-ARG package=zen-4.1.0-rc1-amd64.deb
+ARG package=zen-4.2.0-rc1-amd64.deb
 
 COPY ./testing/$package ./testing/$package.asc ./entrypoint.sh ./ca/* /root/
 
