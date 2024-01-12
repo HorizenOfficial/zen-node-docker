@@ -16,8 +16,8 @@ Starting from `v4.0.0-rc3`, zen-node docker containers will be released in only 
 Release tags:
 * `v4.1.1` tagged releases in format `vX.Y.Z(-$build)` built from [$TAG:/latest/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.1.1/latest/Dockerfile)
 * `v4.1.1-legacy-cpu` tagged releases in format `vX.Y.Z(-$build)-legacy-cpu` built from [$TAG:/latest-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.1.1-legacy-cpu/latest-legacy-cpu/Dockerfile)
-* `v4.2.0-rc1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX|wipX)(|-committish)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.2.0-rc1/testing/Dockerfile)
-* `v4.2.0-rc1-legacy-cpu` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX|wipX)(|-committish)-legacy-cpu` built from [$TAG:/testing-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v4.2.0-rc1-legacy-cpu/testing-legacy-cpu/Dockerfile)
+* `v5.0.0-rc1` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX|wipX)(|-committish)` built from [$TAG:/testing/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v5.0.0-rc1/testing/Dockerfile)
+* `v5.0.0-rc1-legacy-cpu` pre-release/development releases in format `vX.Y.Z-(alphaX|betaX|rcX|wipX)(|-committish)-legacy-cpu` built from [$TAG:/testing-legacy-cpu/Dockerfile](https://github.com/HorizenOfficial/zen-node-docker/blob/v5.0.0-rc1-legacy-cpu/testing-legacy-cpu/Dockerfile)
 
 #### Usage examples
 To run, execute `docker run --name zen-node zencash/zen-node`, this will create a minimal zen.conf file in the named volume `/mnt/zen` which is used as zend's data directory and downloads the ZCash trusted setup to the named volume `/mnt/zcash-params`. Once the trusted setup is downloaded and verified zend will start syncing with the blockchain.
