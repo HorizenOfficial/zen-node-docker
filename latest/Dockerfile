@@ -4,7 +4,7 @@ MAINTAINER cronic@horizen.io
 
 SHELL ["/bin/bash", "-c"]
 
-ARG version=5.0.3
+ARG version=5.0.4
 
 ARG release=v${version}
 
